@@ -18,18 +18,15 @@ public class PlayerController : MonoBehaviour
     protected Vector3 moveDirection;
     protected Rigidbody rigidbody;
 
+    public Projectile projectilePrefab;
+    public LayerMask groundMask;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void FixedUpdate()
@@ -51,6 +48,31 @@ public class PlayerController : MonoBehaviour
         }
 
         return move + dash;
+    }
+    private void RayCastOnMouseClick()
+    {
+        RaycastHit hit;
+        //will probably want to change this when adding controller support
+        Ray rayToFloor = Camera.main.ScreenPointToRay(
+            new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
+        Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 100.1f, Color.red, 2);
+        if (Physics.Raycast(rayToFloor, out hit, 100.0f, groundMask, QueryTriggerInteraction.Collide))
+        {
+            //if we have gun euipped
+            Shoot(hit);
+
+            //will eventually add more functions
+        }
+    }
+    private void Shoot(RaycastHit hit)
+    {
+        Projectile projectile = Instantiate(projectilePrefab);
+        Vector3 pointAboveFloor = hit.point + new Vector3(0, this.transform.position.y, 0);
+        Vector3 direction = pointAboveFloor - this.transform.position;
+        Ray shootRay = new Ray(this.transform.position, direction);
+        Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 2);
+        Physics.IgnoreCollision(this.GetComponent<Collider>(), projectile.GetComponent<Collider>());
+        projectile.FireProjectile(shootRay);
     }
 
     #region Handling Inputs
@@ -75,5 +97,9 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
     }
 
+    public void OnAttack()
+    {
+        RayCastOnMouseClick();
+    }
     #endregion
 }
