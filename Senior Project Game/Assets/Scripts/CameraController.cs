@@ -7,18 +7,12 @@ public class CameraController : MonoBehaviour
     public float moveSpeed;
     public GameObject target;
 
-    private Transform transform;
+    private Transform cameraTransform;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform = this.GetComponent<Transform>().parent;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        cameraTransform = this.GetComponent<Transform>().parent;
     }
 
     void FixedUpdate()
@@ -28,6 +22,6 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        transform.position = Vector3.Lerp(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
+        cameraTransform.position = Vector3.Lerp(cameraTransform.position, target.transform.position, Time.deltaTime * moveSpeed);
     }
 }

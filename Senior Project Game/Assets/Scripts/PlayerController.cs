@@ -16,22 +16,22 @@ public class PlayerController : MonoBehaviour
     protected Vector3 dashDirection;
 
     protected Vector3 moveDirection;
-    protected Rigidbody rigidbody;
+    protected Rigidbody playerRigidbody;
 
     public Projectile projectilePrefab;
     public LayerMask groundMask;
 
-
+    
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = this.GetComponent<Rigidbody>();
+        playerRigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
     }
 
     private void FixedUpdate()
     {
-        rigidbody.velocity = UpdateVelocity();
+        playerRigidbody.velocity = UpdateVelocity();
     }
 
     private Vector3 UpdateVelocity()
@@ -42,6 +42,9 @@ public class PlayerController : MonoBehaviour
         Vector3 dash = Vector3.zero;
         if (isDashing)
         {
+            //for dash == speed boost
+            dashDirection = moveDirection;
+
             dash = dashDirection * dashSpeed;
             if (dashTimeStamp + dashLength < Time.time)
                 isDashing = false;
@@ -55,7 +58,7 @@ public class PlayerController : MonoBehaviour
         //will probably want to change this when adding controller support
         Ray rayToFloor = Camera.main.ScreenPointToRay(
             new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
-        Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 100.1f, Color.red, 2);
+        Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 100.1f, Color.red, 1);
         if (Physics.Raycast(rayToFloor, out hit, 100.0f, groundMask, QueryTriggerInteraction.Collide))
         {
             //if we have gun euipped
@@ -70,7 +73,7 @@ public class PlayerController : MonoBehaviour
         Vector3 pointAboveFloor = hit.point + new Vector3(0, this.transform.position.y, 0);
         Vector3 direction = pointAboveFloor - this.transform.position;
         Ray shootRay = new Ray(this.transform.position, direction);
-        Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 2);
+        Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 1);
         Physics.IgnoreCollision(this.GetComponent<Collider>(), projectile.GetComponent<Collider>());
         projectile.FireProjectile(shootRay);
     }
