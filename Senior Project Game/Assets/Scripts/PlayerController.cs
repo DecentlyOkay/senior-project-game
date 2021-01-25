@@ -5,10 +5,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 10;
-    public float dashSpeed = 20;
-    public float dashLength = 0.3f;
-    public float dashRecoverTime = 0.3f;
+    public float moveSpeed;
+    public float dashSpeed;
+    public float dashLength;
+    public float dashRecoverTime;
+    public float jumpPower;
 
     protected bool isDashing = false;
     protected float dashTimeStamp;
@@ -29,12 +30,27 @@ public class PlayerController : MonoBehaviour
         moveDirection = Vector3.zero;
     }
 
+    
+    private void Update()
+    {   
+        //look at mouse cursor
+        //probably will change to the model later
+        //handle when grounded and in air separately?
+        RaycastHit hit;
+        Ray rayToFloor = Camera.main.ScreenPointToRay(
+            new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
+
+        if (Physics.Raycast(rayToFloor, out hit, 100, groundMask, QueryTriggerInteraction.Collide))
+        {
+            transform.LookAt(hit.point);
+        }
+    }
     private void FixedUpdate()
     {
-        playerRigidbody.velocity = UpdateVelocity();
+        playerRigidbody.velocity = GetUpdateVelocity();
     }
 
-    private Vector3 UpdateVelocity()
+    private Vector3 GetUpdateVelocity()
     {
         Vector3 move = Vector3.zero;
         move = moveDirection * moveSpeed;
@@ -42,7 +58,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dash = Vector3.zero;
         if (isDashing)
         {
-            //for dash == speed boost
+            //dash == speed boost
             dashDirection = moveDirection;
 
             dash = dashDirection * dashSpeed;
@@ -87,7 +103,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump()
     {
-
+        Debug.Log("jump");
     }
     public void OnDash()
     {
