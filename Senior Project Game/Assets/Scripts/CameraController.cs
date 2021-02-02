@@ -15,13 +15,12 @@ public class CameraController : MonoBehaviour
         cameraTransform = this.GetComponent<Transform>().parent;
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         if (target == null)
         {
             return;
         }
-
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, target.transform.position, Time.deltaTime * moveSpeed);
     }
 }

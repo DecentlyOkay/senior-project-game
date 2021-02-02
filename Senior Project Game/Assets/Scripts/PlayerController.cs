@@ -5,22 +5,31 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed;
-    public float dashSpeed;
-    public float dashLength;
-    public float dashRecoverTime;
-    public float jumpPower;
-
-    protected bool isDashing = false;
-    protected float dashTimeStamp;
-    //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
-    protected Vector3 dashDirection;
-
-    protected Vector3 moveDirection;
-    protected Rigidbody playerRigidbody;
+    public float moveSpeed = 10f;
+    public float dashSpeed = 20f;
+    public float dashLength = 0.5f;
+    public float dashRecoverTime = 0.5f;
+    public float jumpPower = 10f;
+    public float gravity = -9.8f;
+    public CharacterController controller;
+    public LayerMask groundMask;
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
 
     public Projectile projectilePrefab;
-    public LayerMask groundMask;
+    
+
+    private Vector3 velocity;
+    private bool isDashing = false;
+    private bool isGrounded;
+    private float dashTimeStamp;
+    //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
+    private Vector3 dashDirection;
+
+    private Vector3 moveDirection;
+    private Rigidbody playerRigidbody;
+
+    
 
     
     // Start is called before the first frame update
@@ -32,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     
     private void Update()
-    {   
+    {
         //look at mouse cursor
         //probably will change to the model later
         //handle when grounded and in air separately?
@@ -42,16 +51,17 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(rayToFloor, out hit, 100, groundMask, QueryTriggerInteraction.Collide))
         {
-            transform.LookAt(hit.point);
+            transform.LookAt(hit.point + new Vector3(0, this.transform.position.y, 0));
         }
-    }
-    private void FixedUpdate()
-    {
-        playerRigidbody.velocity = GetUpdateVelocity();
-    }
 
-    private Vector3 GetUpdateVelocity()
-    {
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = 0;
+        }
+
+        //Character controller movement
         Vector3 move = Vector3.zero;
         move = moveDirection * moveSpeed;
 
@@ -65,8 +75,11 @@ public class PlayerController : MonoBehaviour
             if (dashTimeStamp + dashLength < Time.time)
                 isDashing = false;
         }
+        controller.Move((move + dash) * Time.deltaTime);
 
-        return move + dash;
+        //Gravity
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
     private void RayCastOnMouseClick()
     {
@@ -79,10 +92,10 @@ public class PlayerController : MonoBehaviour
         {
             //if we have gun euipped
             Shoot(hit);
-
             //will eventually add more functions
         }
     }
+
     private void Shoot(RaycastHit hit)
     {
         Projectile projectile = Instantiate(projectilePrefab);
@@ -116,6 +129,7 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
     }
 
+    //Change this to be on the weapon instead of the player later, along with shoot()
     public void OnAttack()
     {
         RayCastOnMouseClick();
