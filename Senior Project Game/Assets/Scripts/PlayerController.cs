@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10f;
     public float dashSpeed = 20f;
     public float dashLength = 0.5f;
-    public float dashRecoverTime = 0.5f;
+    public float dashCooldown = 0.5f;
     public float jumpPower = 10f;
     public float gravity = -9.8f;
     public CharacterController controller;
@@ -16,13 +16,12 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
 
-    public Projectile projectilePrefab;
-    
+    public Transform weaponHolder;
 
     private Vector3 velocity;
     private bool isDashing = false;
     private bool isGrounded;
-    private float dashTimeStamp;
+    private float nextDashTime;
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
     private Vector3 dashDirection;
 
@@ -68,12 +67,14 @@ public class PlayerController : MonoBehaviour
         Vector3 dash = Vector3.zero;
         if (isDashing)
         {
+            float dashStartTime = nextDashTime - dashCooldown;
+            if (dashStartTime + dashLength < Time.time)
+                isDashing = false;
+
             //dash == speed boost
             dashDirection = moveDirection;
-
             dash = dashDirection * dashSpeed;
-            if (dashTimeStamp + dashLength < Time.time)
-                isDashing = false;
+            
         }
         controller.Move((move + dash) * Time.deltaTime);
 
@@ -81,30 +82,15 @@ public class PlayerController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
-    private void RayCastOnMouseClick()
+    public RaycastHit RayCastToMouse()
     {
         RaycastHit hit;
         //will probably want to change this when adding controller support
         Ray rayToFloor = Camera.main.ScreenPointToRay(
             new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
         Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 100.1f, Color.red, 1);
-        if (Physics.Raycast(rayToFloor, out hit, 100.0f, groundMask, QueryTriggerInteraction.Collide))
-        {
-            //if we have gun euipped
-            Shoot(hit);
-            //will eventually add more functions
-        }
-    }
-
-    private void Shoot(RaycastHit hit)
-    {
-        Projectile projectile = Instantiate(projectilePrefab);
-        Vector3 pointAboveFloor = hit.point + new Vector3(0, this.transform.position.y, 0);
-        Vector3 direction = pointAboveFloor - this.transform.position;
-        Ray shootRay = new Ray(this.transform.position, direction);
-        Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 1);
-        Physics.IgnoreCollision(this.GetComponent<Collider>(), projectile.GetComponent<Collider>());
-        projectile.FireProjectile(shootRay);
+        Physics.Raycast(rayToFloor, out hit, 100.0f, groundMask, QueryTriggerInteraction.Collide);
+        return hit;
     }
 
     #region Handling Inputs
@@ -120,19 +106,23 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDash()
     {
-        if (dashTimeStamp + dashRecoverTime > Time.time)
+        //Dash currently on cooldown
+        if (nextDashTime > Time.time)
             return;
         
         Debug.Log("dashing");
         dashDirection = moveDirection;
-        dashTimeStamp = Time.time;
+        nextDashTime = Time.time + dashCooldown;
         isDashing = true;
     }
 
-    //Change this to be on the weapon instead of the player later, along with shoot()
     public void OnAttack()
     {
-        RayCastOnMouseClick();
+        foreach (Transform weapon in weaponHolder)
+        {
+            Debug.Log(weapon);
+            weapon.gameObject.GetComponent<Weapon>().Attack();
+        }
     }
     #endregion
 }
