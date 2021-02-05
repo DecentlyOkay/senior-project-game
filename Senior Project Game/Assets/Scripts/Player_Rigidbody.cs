@@ -167,7 +167,6 @@ public class Player_Rigidbody : MonoBehaviour
         //Obviously need to augment this up when adding more weapons
         foreach (Transform weapon in weaponHolder)
         {
-            Debug.Log(weapon);
             weapon.gameObject.GetComponent<Weapon>().Attack();
         }
     }
