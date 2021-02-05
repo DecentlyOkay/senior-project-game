@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class Player_Rigidbody : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float dashSpeed = 20f;
     public float dashLength = 0.5f;
     public float dashCooldown = 0.5f;
-    public float jumpHeight = 10f;
+    public float jumpPower = 10f;
     public float gravity = -9.8f;
-    public CharacterController controller;
     public LayerMask groundMask;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -22,16 +21,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     private bool isDashing = false;
     private bool isGrounded;
+    private bool isJumping;
     private float nextDashTime;
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
     private Vector3 dashDirection;
-
     private Vector3 moveDirection;
     private Rigidbody playerRigidbody;
 
-    
 
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -39,37 +36,22 @@ public class PlayerController : MonoBehaviour
         moveDirection = Vector3.zero;
     }
 
-    
-    private void Update()
+    private void FixedUpdate()
     {
-        //look at mouse cursor
-        //probably will change to the model later
-        //handle when grounded and in air separately?
-        RaycastHit mouseLoc = RayCastToMouse();
-        if(mouseLoc.collider != null)
-        {
-            Vector3 lookPoint = mouseLoc.point;
-            if(isGrounded)
-            {
-                lookPoint.y = transform.position.y;
-            }
-            models.transform.LookAt(lookPoint);
-        }
-
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded)
+        if (isGrounded && playerRigidbody.velocity.y < 0)
         {
-            Debug.Log("grounded" + Time.time);
-        }
-           
+            playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0, playerRigidbody.velocity.z);
 
-        if (isGrounded && velocity.y < 0)
+        }
+        if(isJumping)
         {
-            velocity.y = -2f;
+            UpdateVelocity(0, jumpPower, 0);
+            isJumping = false;
+            isGrounded = false;
         }
 
-        //Character controller movement
+        //Calculate movement
         Vector3 move = Vector3.zero;
         move = moveDirection * moveSpeed;
 
@@ -84,7 +66,30 @@ public class PlayerController : MonoBehaviour
             //dashDirection = moveDirection;
 
             dash = dashDirection * dashSpeed;
-            
+
+        }
+        //Can try this out if setting velocity don't work no more
+        //playerRigidbody.AddForce(move + dash - playerRigidbody.velocity, ForceMode.VelocityChange);
+
+
+        SetHorizontalVelocity(move + dash);
+        UpdateVelocity(0, gravity * Time.fixedDeltaTime, 0);
+    }
+
+    private void Update()
+    {
+        //look at mouse cursor
+        //probably will change to the model later
+        //handle when grounded and in air separately?
+        RaycastHit mouseLoc = RayCastToMouse();
+        if (mouseLoc.collider != null)
+        {
+            Vector3 lookPoint = mouseLoc.point;
+            if (isGrounded)
+            {
+                lookPoint.y = transform.position.y;
+            }
+            models.transform.LookAt(lookPoint);
         }
 
         //Might want to do some fancy code to make it where you can move within 90 degrees of a dash direction
@@ -92,12 +97,19 @@ public class PlayerController : MonoBehaviour
 
         //Actually might want to consider binding dash to right click, this will lose weapon functionality, i.e. scoping in
         //but will allow you to dash in the mouse direction.
+    }
 
-        controller.Move((move + dash) * Time.deltaTime);
-
-        //Gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+    private void UpdateVelocity(Vector3 v)
+    {
+        UpdateVelocity(v.x, v.y, v.z);
+    }
+    private void UpdateVelocity(float x, float y, float z)
+    {
+        playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x + x, playerRigidbody.velocity.y + y, playerRigidbody.velocity.z + z);
+    }
+    private void SetHorizontalVelocity(Vector3 v)
+    {
+        playerRigidbody.velocity = new Vector3(v.x, playerRigidbody.velocity.y, v.z);
     }
     public RaycastHit RayCastToMouse()
     {
@@ -130,20 +142,19 @@ public class PlayerController : MonoBehaviour
 
         //Probably want to add coyote time + buffered jumps as well
 
-        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance+0.2f, groundMask))
+        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.2f, groundMask))
         {
-            velocity.y += jumpHeight;
             Debug.Log("jump");
-            isGrounded = false;
+            isJumping = true;
         }
-        
+
     }
     public void OnDash()
     {
         //If dash is currently on cooldown, you will not dash
         if (nextDashTime > Time.time)
             return;
-        
+
         Debug.Log("dashing");
         dashDirection = moveDirection;
         nextDashTime = Time.time + dashCooldown;

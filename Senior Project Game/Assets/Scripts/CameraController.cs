@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
         cameraTransform = this.GetComponent<Transform>().parent;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (target == null)
         {

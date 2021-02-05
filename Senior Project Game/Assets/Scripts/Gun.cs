@@ -6,11 +6,11 @@ public class Gun : Weapon
 {
     public Projectile projectilePrefab;
 
-    private PlayerController player;
+    private Player_Rigidbody player;
 
     void Start()
     {
-        player = GetComponentInParent<PlayerController>();
+        player = GetComponentInParent<Player_Rigidbody>();
     }
 
     public override void Attack()
