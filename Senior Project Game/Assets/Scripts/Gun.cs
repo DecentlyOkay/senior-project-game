@@ -6,11 +6,11 @@ public class Gun : Weapon
 {
     public Projectile projectilePrefab;
 
-    private Player_Rigidbody player;
+    private PlayerMovement player;
 
     void Start()
     {
-        player = GetComponentInParent<Player_Rigidbody>();
+        player = GetComponentInParent<PlayerMovement>();
     }
 
     public override void Attack()
@@ -37,7 +37,11 @@ public class Gun : Weapon
 
         Ray shootRay = new Ray(this.transform.position, direction);
         Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 1);
-        Physics.IgnoreCollision(player.GetComponent<Collider>(), projectile.GetComponent<Collider>());
+        foreach (Collider collider in player.GetComponents<Collider>())
+        {
+            Physics.IgnoreCollision(collider, projectile.GetComponent<Collider>());
+        }
+        
         projectile.FireProjectile(shootRay);
     }
 }

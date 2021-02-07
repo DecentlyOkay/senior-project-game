@@ -248,12 +248,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7207760003383047542}
   - component: {fileID: 7207760003383047528}
-  - component: {fileID: 7207760003383047545}
+  - component: {fileID: 6612948253575047080}
   - component: {fileID: 7207760003383047529}
+  - component: {fileID: 7207760003383047545}
   - component: {fileID: 7207760003383047543}
+  - component: {fileID: 194996249183521267}
   m_Layer: 0
   m_Name: Player_Rigidbody
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -284,10 +286,40 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 1d6a61832618c4e48890d4b954bbfdfd, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.55
+  m_Height: 0.9
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &6612948253575047080
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207760003383047540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &7207760003383047529
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207760003383047540}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &7207760003383047545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,22 +350,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!54 &7207760003383047529
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7207760003383047540}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!114 &7207760003383047543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,9 +362,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454c5d2885f02ae4caa5d738487fb327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 8
   dashSpeed: 20
-  dashLength: 0.5
+  dashLength: 0.2
   dashCooldown: 0.5
   jumpPower: 20
   gravity: -30
@@ -359,3 +375,17 @@ MonoBehaviour:
   groundDistance: 0.2
   weaponHolder: {fileID: 7207760002569804844}
   models: {fileID: 441891168112570591}
+--- !u!114 &194996249183521267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207760003383047540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c437d8c8fc68f4448c1fd472a18205d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  health: 10

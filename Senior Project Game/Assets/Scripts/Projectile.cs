@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed;
+    public float damage;
 
     protected Vector3 direction;
 
@@ -27,7 +28,12 @@ public class Projectile : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("b");
+        GameObject other = collision.gameObject;
+        if(other.CompareTag("Enemy")) {
+            Enemy enemy = other.GetComponent<Enemy>();
+            enemy.ApplyDamage(damage);
+            Debug.Log("Enemy health: " + enemy.health);
+        }
         Destroy(this.gameObject);
     }
 

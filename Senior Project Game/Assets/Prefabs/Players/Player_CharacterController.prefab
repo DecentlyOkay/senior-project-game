@@ -294,10 +294,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3892984365215537367}
   - component: {fileID: 3892984365215537366}
-  - component: {fileID: 3892984365215537369}
   - component: {fileID: 3892984365215537368}
+  - component: {fileID: 3892984365215537369}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player_CharacterController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,32 +337,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3892984365215537369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3892984365215537365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f2e17b824c113f40baa03e22b63761a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 10
-  dashSpeed: 20
-  dashLength: 0.2
-  dashCooldown: 0.5
-  jumpHeight: 30
-  gravity: -30
-  controller: {fileID: 3892984365215537366}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
-  groundCheck: {fileID: 3892984364150896943}
-  groundDistance: 0.3
-  weaponHolder: {fileID: 3892984363864387981}
-  models: {fileID: 3892984363407436299}
 --- !u!114 &3892984365215537368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,3 +367,29 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3892984365215537369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892984365215537365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f2e17b824c113f40baa03e22b63761a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  dashSpeed: 20
+  dashLength: 0.2
+  dashCooldown: 0.5
+  jumpHeight: 30
+  gravity: -30
+  controller: {fileID: 3892984365215537366}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  groundCheck: {fileID: 3892984364150896943}
+  groundDistance: 0.3
+  weaponHolder: {fileID: 3892984363864387981}
+  models: {fileID: 3892984363407436299}

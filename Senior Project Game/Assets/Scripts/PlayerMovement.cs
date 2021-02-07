@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player_CharController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float dashSpeed = 20f;
     public float dashLength = 0.5f;
     public float dashCooldown = 0.5f;
-    public float jumpHeight = 10f;
+    public float jumpPower = 10f;
     public float gravity = -9.8f;
-    public CharacterController controller;
+    //Might just want to make groundMask everything but the player layer, something like ^(playerMask)
     public LayerMask groundMask;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -22,57 +22,44 @@ public class Player_CharController : MonoBehaviour
     private Vector3 velocity;
     private bool isDashing = false;
     private bool isGrounded;
+    private bool isJumping;
     private float nextDashTime;
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
     private Vector3 dashDirection;
-
     private Vector3 moveDirection;
-    private Rigidbody playerRigidbody;
+    private Rigidbody rigidbody;
 
-    
 
-    
     // Start is called before the first frame update
     void Start()
     {
-        playerRigidbody = this.GetComponent<Rigidbody>();
+        rigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
     }
 
-    
-    private void Update()
+    //Will want to move these to separate methods
+    private void FixedUpdate()
     {
-        //look at mouse cursor
-        //probably will change to the model later
-        //handle when grounded and in air separately?
-        RaycastHit mouseLoc = RayCastToMouse();
-        if(mouseLoc.collider != null)
-        {
-            Vector3 lookPoint = mouseLoc.point;
-            if(isGrounded)
-            {
-                lookPoint.y = transform.position.y;
-            }
-            models.transform.LookAt(lookPoint);
-        }
-
+        //Grounded check
+        //Might not need mask even, can just check for not player? That way, can jump off of enemies' heads
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded)
+        if (isGrounded && rigidbody.velocity.y < 0)
         {
-            Debug.Log("grounded" + Time.time);
-        }
-           
+            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
 
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
         }
 
-        //Character controller movement
+        //Jumping
+        if(isJumping)
+        {
+            rigidbody.AddForce(0, jumpPower, 0, ForceMode.VelocityChange);
+            isJumping = false;
+            isGrounded = false;
+        }
+
+        //Calculate movement
         Vector3 move = Vector3.zero;
         move = moveDirection * moveSpeed;
-
         Vector3 dash = Vector3.zero;
         if (isDashing)
         {
@@ -82,9 +69,36 @@ public class Player_CharController : MonoBehaviour
 
             //for if you want dash == speed boost
             //dashDirection = moveDirection;
-
-            dash = dashDirection * dashSpeed;
             
+            dash = dashDirection * dashSpeed;
+
+        }
+
+        //Better movement code
+        Vector3 horizontalMove = move + dash - rigidbody.velocity;
+        horizontalMove.y = 0;
+        rigidbody.AddForce(horizontalMove, ForceMode.VelocityChange);
+        rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
+
+        //Old movement code
+        //SetHorizontalVelocity(move + dash);
+        //UpdateVelocity(0, gravity * Time.fixedDeltaTime, 0);
+    }
+
+    private void Update()
+    {
+        //look at mouse cursor
+        //probably will change to the model later
+        //handle when grounded and in air separately?
+        RaycastHit mouseLoc = RayCastToMouse();
+        if (mouseLoc.collider != null)
+        {
+            Vector3 lookPoint = mouseLoc.point;
+            if (isGrounded)
+            {
+                lookPoint.y = transform.position.y;
+            }
+            models.transform.LookAt(lookPoint);
         }
 
         //Might want to do some fancy code to make it where you can move within 90 degrees of a dash direction
@@ -92,12 +106,19 @@ public class Player_CharController : MonoBehaviour
 
         //Actually might want to consider binding dash to right click, this will lose weapon functionality, i.e. scoping in
         //but will allow you to dash in the mouse direction.
+    }
 
-        controller.Move((move + dash) * Time.deltaTime);
-
-        //Gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+    private void UpdateVelocity(Vector3 v)
+    {
+        UpdateVelocity(v.x, v.y, v.z);
+    }
+    private void UpdateVelocity(float x, float y, float z)
+    {
+        rigidbody.velocity = new Vector3(rigidbody.velocity.x + x, rigidbody.velocity.y + y, rigidbody.velocity.z + z);
+    }
+    private void SetHorizontalVelocity(Vector3 v)
+    {
+        rigidbody.velocity = new Vector3(v.x, rigidbody.velocity.y, v.z);
     }
     public RaycastHit RayCastToMouse()
     {
@@ -130,20 +151,19 @@ public class Player_CharController : MonoBehaviour
 
         //Probably want to add coyote time + buffered jumps as well
 
-        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance+0.2f, groundMask))
+        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.2f, groundMask))
         {
-            velocity.y += jumpHeight;
             Debug.Log("jump");
-            isGrounded = false;
+            isJumping = true;
         }
-        
+
     }
     public void OnDash()
     {
         //If dash is currently on cooldown, you will not dash
         if (nextDashTime > Time.time)
             return;
-        
+
         Debug.Log("dashing");
         dashDirection = moveDirection;
         nextDashTime = Time.time + dashCooldown;
@@ -153,10 +173,10 @@ public class Player_CharController : MonoBehaviour
     //Will probably change the input to take in context in order to have automatic fire
     public void OnAttack()
     {
+        Debug.Log("attack");
         //Obviously need to augment this up when adding more weapons
         foreach (Transform weapon in weaponHolder)
         {
-            Debug.Log(weapon);
             weapon.gameObject.GetComponent<Weapon>().Attack();
         }
     }
