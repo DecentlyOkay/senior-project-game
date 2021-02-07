@@ -18,7 +18,14 @@ public class Gun : Weapon
         RaycastHit mouseLoc = player.RayCastToMouse();
         if(mouseLoc.collider != null)
         {
-            Shoot(mouseLoc);
+            Vector3 point = mouseLoc.point;
+            //Will shoot straight when grounded
+            if (player.isGrounded)
+            {
+                point.y = player.transform.position.y;
+            }
+            Shoot(point);
+            
         }
     }
 
@@ -27,13 +34,13 @@ public class Gun : Weapon
     //else just shoot at hit location (where mouse is)
     //Actually might just want to universally add the player y scale offset to hit location
 
-    private void Shoot(RaycastHit hit)
+    private void Shoot(Vector3 point)
     {
         Projectile projectile = Instantiate(projectilePrefab);
 
         //Vector3 pointAboveFloor = hit.point + new Vector3(0, this.transform.position.y, 0);
         //Vector3 direction = pointAboveFloor - this.transform.position;
-        Vector3 direction = hit.point - this.transform.position;
+        Vector3 direction = point - this.transform.position;
 
         Ray shootRay = new Ray(this.transform.position, direction);
         Debug.DrawRay(shootRay.origin, shootRay.direction * 100.1f, Color.green, 1);

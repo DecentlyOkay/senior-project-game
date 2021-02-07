@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isDashing = false;
-    private bool isGrounded;
+    public bool isGrounded;
     private bool isJumping;
     private float nextDashTime;
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
@@ -30,7 +30,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rigidbody;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         rigidbody = this.GetComponent<Rigidbody>();
