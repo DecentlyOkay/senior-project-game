@@ -287,7 +287,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.55
-  m_Height: 0.9
+  m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &6612948253575047080
@@ -301,7 +301,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7207760003383047529
@@ -312,7 +312,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7207760003383047540}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -375,6 +375,7 @@ MonoBehaviour:
   groundDistance: 0.2
   weaponHolder: {fileID: 7207760002569804844}
   models: {fileID: 441891168112570591}
+  isGrounded: 0
 --- !u!114 &194996249183521267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,5 +388,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c437d8c8fc68f4448c1fd472a18205d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
-  health: 10
+  maxHealth: 25
+  health: 25

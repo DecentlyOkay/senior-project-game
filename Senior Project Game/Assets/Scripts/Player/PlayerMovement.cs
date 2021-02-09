@@ -19,7 +19,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform weaponHolder;
     public Transform models;
 
+    //So I guess the plan is to store forces from explosions here and handle them manually
     private Vector3 velocity;
+
     private bool isDashing = false;
     public bool isGrounded;
     private bool isJumping;
@@ -106,19 +108,7 @@ public class PlayerMovement : MonoBehaviour
         //Actually might want to consider binding dash to right click, this will lose weapon functionality, i.e. scoping in
         //but will allow you to dash in the mouse direction.
     }
-
-    private void UpdateVelocity(Vector3 v)
-    {
-        UpdateVelocity(v.x, v.y, v.z);
-    }
-    private void UpdateVelocity(float x, float y, float z)
-    {
-        rigidbody.velocity = new Vector3(rigidbody.velocity.x + x, rigidbody.velocity.y + y, rigidbody.velocity.z + z);
-    }
-    private void SetHorizontalVelocity(Vector3 v)
-    {
-        rigidbody.velocity = new Vector3(v.x, rigidbody.velocity.y, v.z);
-    }
+    
     public RaycastHit RayCastToMouse()
     {
         RaycastHit hit;
