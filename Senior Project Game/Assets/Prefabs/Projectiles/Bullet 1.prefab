@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.5
   damage: 1
+  knockback: 10
 --- !u!54 &-213918392283818163
 Rigidbody:
   m_ObjectHideFlags: 0

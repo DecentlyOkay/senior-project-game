@@ -5,7 +5,7 @@ using System.Linq;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public bool waitForClear = true;
+    public bool waitForClear = false;
     public bool repeat = false;
     [SerializeField] private Wave[] waves = new Wave[0];
     private List<Enemy> aliveEnemies = new List<Enemy>();
@@ -64,6 +64,9 @@ public class EnemySpawner : MonoBehaviour
     {
         Debug.Log("Spawning an enemy");
         Enemy currEnemy = Instantiate(enemy, GetRandomSpawnPosition(), Quaternion.identity);
+        foreach(Component c in currEnemy.gameObject.GetComponents<Component>()){
+            Debug.Log(c);
+        }
         aliveEnemies.Add(currEnemy);
     }
 

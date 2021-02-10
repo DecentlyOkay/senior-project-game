@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 377584499542844201, guid: e915a8ef30b80ce48ab86287882b81a5, type: 3}
+  recoil: 0
 --- !u!1 &7207760003383047540
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +369,7 @@ MonoBehaviour:
   dashCooldown: 0.5
   jumpPower: 20
   gravity: -30
+  forceFallOffFactor: 0.5
   groundMask:
     serializedVersion: 2
     m_Bits: 256

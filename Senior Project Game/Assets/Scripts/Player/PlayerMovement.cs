@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 0.5f;
     public float jumpPower = 10f;
     public float gravity = -9.8f;
+    public float forceFallOffFactor = 0.5f;
     //Might just want to make groundMask everything but the player layer, something like ^(playerMask)
     public LayerMask groundMask;
     public Transform groundCheck;
@@ -19,8 +20,8 @@ public class PlayerMovement : MonoBehaviour
     public Transform weaponHolder;
     public Transform models;
 
-    //So I guess the plan is to store forces from explosions here and handle them manually
-    private Vector3 velocity;
+    //So I guess the plan is to store forces from explosions/recoil here and handle them manually
+    private Vector3 forces;
 
     private bool isDashing = false;
     public bool isGrounded;
@@ -36,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
+        forces = Vector3.zero;
     }
 
     //Will want to move these to separate methods
@@ -77,10 +79,8 @@ public class PlayerMovement : MonoBehaviour
 
         //Better movement code
         Vector3 horizontalMove = move + dash - rigidbody.velocity;
-        horizontalMove.y = 0;
-        rigidbody.AddForce(horizontalMove, ForceMode.VelocityChange);
-        rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
-
+        UpdateForces(horizontalMove);
+        
         //Old movement code
         //SetHorizontalVelocity(move + dash);
         //UpdateVelocity(0, gravity * Time.fixedDeltaTime, 0);
@@ -109,14 +109,30 @@ public class PlayerMovement : MonoBehaviour
         //but will allow you to dash in the mouse direction.
     }
     
+    private void UpdateForces(Vector3 movement)
+    {
+        movement.y = 0;
+        rigidbody.AddForce(movement, ForceMode.VelocityChange);
+        rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
+        rigidbody.AddForce(forces, ForceMode.VelocityChange);
+        forces *= forceFallOffFactor;
+    }
+
+    public void AddForce(Vector3 force)
+    {
+        forces.x += force.x / rigidbody.mass;
+        forces.z += force.z / rigidbody.mass;
+        rigidbody.AddForce(0, force.y, 0, ForceMode.Impulse);
+    }
+
     public RaycastHit RayCastToMouse()
     {
         RaycastHit hit;
         //will want to augment this when adding controller support
         Ray rayToFloor = Camera.main.ScreenPointToRay(
             new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
-        Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 100.1f, Color.red, 1);
-        Physics.Raycast(rayToFloor, out hit, 100.0f, groundMask, QueryTriggerInteraction.Collide);
+        Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 1000f, Color.red, 1);
+        Physics.Raycast(rayToFloor, out hit, 1000f, groundMask, QueryTriggerInteraction.Collide);
 
         //Make it so that when player is on lower ground and mouse clicks over higher ground, they y position of the hit
         //will be at the player's feet's y position

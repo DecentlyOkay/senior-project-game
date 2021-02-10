@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed;
-    public float damage;
+    public float speed = 1f;
+    public float damage = 1f;
+    public float knockback = 0f;
 
-    protected Vector3 direction;
+    private Vector3 direction;
 
     void FixedUpdate()
     {
@@ -31,6 +32,7 @@ public class Projectile : MonoBehaviour
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy")) {
             Enemy enemy = other.GetComponent<Enemy>();
+            enemy.AddForce(this.direction.normalized * knockback);
             enemy.ApplyDamage(damage);
             Debug.Log("Enemy health: " + enemy.health);
         }
