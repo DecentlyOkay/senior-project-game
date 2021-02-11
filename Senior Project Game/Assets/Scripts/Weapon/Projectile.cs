@@ -32,7 +32,11 @@ public class Projectile : MonoBehaviour
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy")) {
             Enemy enemy = other.GetComponent<Enemy>();
-            enemy.AddForce(this.direction.normalized * knockback);
+            enemy.ApplyForce(this.direction.normalized * knockback);
+
+            //For testing
+            //enemy.ApplyForce(new Vector3(0, 20, 0));
+
             enemy.ApplyDamage(damage);
             Debug.Log("Enemy health: " + enemy.health);
         }

@@ -22,10 +22,10 @@ public class Gun : Weapon
 
             if (player.isGrounded)
             {
-                //If you are shooting somewhere lower than your feet, you will shoot at the point + 1/2 player model height
-                if (point.y < player.groundCheck.position.y)
+                //If you are shooting somewhere lower than your feet, you will shoot at the point + 1/4 player model height
+                if (point.y < player.groundCheck.position.y - 0.1f)
                 {
-                    point.y += player.transform.position.y - player.groundCheck.position.y;
+                    point.y += (player.transform.position.y - player.groundCheck.position.y) / 2f;
                 }
                 //Will shoot straight when grounded and aiming at player level, will want to add to this later if you want to
                 //aim at higher places on walls while grounded
@@ -34,8 +34,9 @@ public class Gun : Weapon
                     point.y = player.transform.position.y;
                 }
             }
+            
             Shoot(point);
-            player.AddForce(-(point - this.transform.position).normalized * recoil);
+            player.ApplyForce(-(point - this.transform.position).normalized * recoil);
         }
     }
 

@@ -132,5 +132,11 @@ MonoBehaviour:
   nextContactDamageTime: 0
   timeBetweenContactDamage: 1
   forceFallOffFactor: 0.5
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  isGrounded: 0
   deathTimer: 2
+  corpseResilience: 0.2
   deadColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

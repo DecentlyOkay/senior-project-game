@@ -309,7 +309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &214441797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitForClear: 0
-  repeat: 0
+  repeat: 1
   waves:
   - enemies:
     - {fileID: 2937847041866307557, guid: 059e7dbf57b2f7048a23afae177215d2, type: 3}
@@ -1577,6 +1577,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7207760003383047529, guid: 6ad848f1d7553614a893f9e90a510796, type: 3}
+      propertyPath: m_Mass
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207760003383047529, guid: 6ad848f1d7553614a893f9e90a510796, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7207760003383047540, guid: 6ad848f1d7553614a893f9e90a510796, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1640,7 +1648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1359320964960507128, guid: 761c49d65e6dcec498a7b3dd024e2bb9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1359320964960507133, guid: 761c49d65e6dcec498a7b3dd024e2bb9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1745,7 +1753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2937847041866307556, guid: 059e7dbf57b2f7048a23afae177215d2, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2937847041866307557, guid: 059e7dbf57b2f7048a23afae177215d2, type: 3}
       propertyPath: target

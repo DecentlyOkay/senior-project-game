@@ -12,6 +12,10 @@ public abstract class Enemy : MonoBehaviour
     public float timeBetweenContactDamage = 1f;
     public float forceFallOffFactor = 0.5f;
 
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+    public bool isGrounded;
+
     //Corpse will disappear after deathTimer seconds, or after an additional corpseResilience proportion of health is dealt as damage
     //Idea: shootup corpses for extra points
     public float deathTimer = 5f;
@@ -36,6 +40,11 @@ public abstract class Enemy : MonoBehaviour
     }
     public void FixedUpdate()
     {
+        Vector3 groundCheck = this.transform.position;
+        groundCheck.y -= this.transform.localScale.y / 2;
+        isGrounded = Physics.CheckSphere(groundCheck, groundDistance * transform.localScale.y, groundMask);
+        Debug.Log(groundCheck + " " + isGrounded);
+
         rigidbody.AddForce(forces, ForceMode.VelocityChange);
         forces *= forceFallOffFactor;
         if (isDead)
@@ -62,13 +71,20 @@ public abstract class Enemy : MonoBehaviour
         moveDirection.y = 0;
         moveDirection = moveDirection.normalized;
         Vector3 horizontalMove = moveDirection * speed - rigidbody.velocity;
+        
+        //Move slower in the air
+        if (!isGrounded)
+        {
+            Debug.Log("slowed");
+            horizontalMove = moveDirection * speed * 0.4f - rigidbody.velocity;
+        }
         horizontalMove.y = 0;
         rigidbody.AddForce(horizontalMove, ForceMode.VelocityChange);
     }
-    public void AddForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
-        forces.x += force.x / rigidbody.mass;
-        forces.z += force.z / rigidbody.mass;
+        forces.x += force.x;
+        forces.z += force.z;
         rigidbody.AddForce(0, force.y, 0, ForceMode.Impulse);
     }
     public void ApplyDamage(float damage)

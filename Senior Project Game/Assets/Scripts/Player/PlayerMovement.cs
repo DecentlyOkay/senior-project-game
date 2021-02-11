@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     //Might just want to make groundMask everything but the player layer, something like ^(playerMask)
     public LayerMask groundMask;
     public Transform groundCheck;
-    public float groundDistance = 0.4f;
+    public float groundDistance = 0.2f;
 
     public Transform weaponHolder;
     public Transform models;
@@ -49,9 +49,8 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && rigidbody.velocity.y < 0)
         {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
-
         }
-
+        Debug.Log(isGrounded);
         //Jumping
         if(isJumping)
         {
@@ -79,8 +78,10 @@ public class PlayerMovement : MonoBehaviour
 
         //Better movement code
         Vector3 horizontalMove = move + dash - rigidbody.velocity;
+        horizontalMove.y = 0;
         UpdateForces(horizontalMove);
-        
+
+
         //Old movement code
         //SetHorizontalVelocity(move + dash);
         //UpdateVelocity(0, gravity * Time.fixedDeltaTime, 0);
@@ -111,17 +112,18 @@ public class PlayerMovement : MonoBehaviour
     
     private void UpdateForces(Vector3 movement)
     {
-        movement.y = 0;
+        Debug.Log(rigidbody.velocity);
         rigidbody.AddForce(movement, ForceMode.VelocityChange);
-        rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
         rigidbody.AddForce(forces, ForceMode.VelocityChange);
+        rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
         forces *= forceFallOffFactor;
+        Debug.Log(rigidbody.velocity);
     }
 
-    public void AddForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
-        forces.x += force.x / rigidbody.mass;
-        forces.z += force.z / rigidbody.mass;
+        forces.x += force.x;
+        forces.z += force.z;
         rigidbody.AddForce(0, force.y, 0, ForceMode.Impulse);
     }
 
@@ -156,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Probably want to add coyote time + buffered jumps as well
 
-        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.2f, groundMask))
+        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask))
         {
             Debug.Log("jump");
             isJumping = true;

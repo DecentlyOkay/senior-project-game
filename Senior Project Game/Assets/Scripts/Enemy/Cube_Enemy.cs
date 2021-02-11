@@ -6,7 +6,7 @@ public class Cube_Enemy : Enemy
 {
     public void FixedUpdate()
     {
-        base.FixedUpdate();
         MoveTowardsTarget();
+        base.FixedUpdate();
     }
 }

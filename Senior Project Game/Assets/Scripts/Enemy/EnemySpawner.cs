@@ -56,8 +56,8 @@ public class EnemySpawner : MonoBehaviour
     }
     public bool EnemiesAlive()
     {
-        // uses Linq to filter out null (previously detroyed) entries
-        aliveEnemies = aliveEnemies.Where(e => e != null).ToList();
+        // uses Linq to filter out null (previously destroyed) entries and keep only alive enemies
+        aliveEnemies = aliveEnemies.Where(e => e != null && e.health > 0).ToList();
         return aliveEnemies.Count > 0;
     }
     private void SpawnEnemy(Enemy enemy)
