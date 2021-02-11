@@ -13,7 +13,8 @@ public abstract class Enemy : MonoBehaviour
     public float forceFallOffFactor = 0.5f;
 
     public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    private LayerMask groundMask;
+    private LayerMask enemyMask;
     public bool isGrounded;
 
     //Corpse will disappear after deathTimer seconds, or after an additional corpseResilience proportion of health is dealt as damage
@@ -37,13 +38,16 @@ public abstract class Enemy : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player").transform;
         renderer = this.GetComponent<Renderer>();
         healthyColor = renderer.material.color;
+
+        //Both enemies and the ground count as ground mask for grounded purposes
+        groundMask = LayerMask.GetMask("Ground");
+        enemyMask = LayerMask.GetMask("Enemy");
     }
     public void FixedUpdate()
     {
         Vector3 groundCheck = this.transform.position;
         groundCheck.y -= this.transform.localScale.y / 2;
-        isGrounded = Physics.CheckSphere(groundCheck, groundDistance * transform.localScale.y, groundMask);
-        Debug.Log(groundCheck + " " + isGrounded);
+        isGrounded = Physics.CheckSphere(groundCheck, groundDistance * transform.localScale.y, groundMask | enemyMask);
 
         rigidbody.AddForce(forces, ForceMode.VelocityChange);
         forces *= forceFallOffFactor;
@@ -75,7 +79,6 @@ public abstract class Enemy : MonoBehaviour
         //Move slower in the air
         if (!isGrounded)
         {
-            Debug.Log("slowed");
             horizontalMove = moveDirection * speed * 0.4f - rigidbody.velocity;
         }
         horizontalMove.y = 0;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1359320964960507130}
   - component: {fileID: 1359320964960507134}
   - component: {fileID: 1359320964960507129}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Enemy_BigCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

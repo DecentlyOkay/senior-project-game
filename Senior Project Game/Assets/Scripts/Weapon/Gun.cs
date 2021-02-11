@@ -15,7 +15,7 @@ public class Gun : Weapon
     }
     public override void Attack()
     {
-        RaycastHit mouseLoc = player.RayCastToMouse();
+        RaycastHit mouseLoc = player.RayCastToMouse(LayerMask.GetMask("Ground"));
         if(mouseLoc.collider != null)
         {
             Vector3 point = mouseLoc.point;

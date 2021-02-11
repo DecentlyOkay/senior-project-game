@@ -13,7 +13,6 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Spawner initializing");
         spawnArea = this.GetComponent<Collider>().bounds;
         StartCoroutine(RunSpawner());
     }
@@ -40,15 +39,14 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator SpawnWave(Wave wave)
     {
         yield return new WaitForSeconds(wave.countDown);
+        Debug.Log("wave starting");
         int index = 0;
         foreach (Enemy enemy in wave.enemies)
         {
-            Debug.Log(index);
             
             SpawnEnemy(enemy);
             if(index != wave.enemies.Length - 1)
             {
-                Debug.Log("Waiting for " + wave.spawnDelay + " seconds");
                 yield return new WaitForSeconds(wave.spawnDelay);
             }
             index++;
@@ -62,11 +60,7 @@ public class EnemySpawner : MonoBehaviour
     }
     private void SpawnEnemy(Enemy enemy)
     {
-        Debug.Log("Spawning an enemy");
         Enemy currEnemy = Instantiate(enemy, GetRandomSpawnPosition(), Quaternion.identity);
-        foreach(Component c in currEnemy.gameObject.GetComponents<Component>()){
-            Debug.Log(c);
-        }
         aliveEnemies.Add(currEnemy);
     }
 

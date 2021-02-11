@@ -12,8 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float jumpPower = 10f;
     public float gravity = -9.8f;
     public float forceFallOffFactor = 0.5f;
-    //Might just want to make groundMask everything but the player layer, something like ^(playerMask)
-    public LayerMask groundMask;
+
+    private LayerMask groundMask;
+    private LayerMask enemyMask;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
 
@@ -38,6 +39,10 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
+
+        //Both enemies and the ground will count as mask for jumping and grounded purposes
+        groundMask = LayerMask.GetMask("Ground");
+        enemyMask = LayerMask.GetMask("Enemy");
     }
 
     //Will want to move these to separate methods
@@ -45,12 +50,11 @@ public class PlayerMovement : MonoBehaviour
     {
         //Grounded check
         //Might not need mask even, can just check for not player? That way, can jump off of enemies' heads
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask | enemyMask);
         if (isGrounded && rigidbody.velocity.y < 0)
         {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
         }
-        Debug.Log(isGrounded);
         //Jumping
         if(isJumping)
         {
@@ -91,7 +95,21 @@ public class PlayerMovement : MonoBehaviour
         //look at mouse cursor
         //probably will change to the model later
         //handle when grounded and in air separately?
-        RaycastHit mouseLoc = RayCastToMouse();
+        if (!PauseMenu.gameIsPaused)
+        {
+            LookAtMouse();
+        }
+
+        //Might want to do some fancy code to make it where you can move within 90 degrees of a dash direction
+        //And movement in anything outside of that range will not register
+
+        //Actually might want to consider binding dash to right click, this will lose weapon functionality, i.e. scoping in
+        //but will allow you to dash in the mouse direction.
+    }
+
+    private void LookAtMouse()
+    {
+        RaycastHit mouseLoc = RayCastToMouse(groundMask);
         if (mouseLoc.collider != null)
         {
             Vector3 lookPoint = mouseLoc.point;
@@ -101,12 +119,6 @@ public class PlayerMovement : MonoBehaviour
             }
             models.transform.LookAt(lookPoint);
         }
-
-        //Might want to do some fancy code to make it where you can move within 90 degrees of a dash direction
-        //And movement in anything outside of that range will not register
-
-        //Actually might want to consider binding dash to right click, this will lose weapon functionality, i.e. scoping in
-        //but will allow you to dash in the mouse direction.
     }
     
     private void UpdateForces(Vector3 movement)
@@ -120,20 +132,19 @@ public class PlayerMovement : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        Debug.Log("force being applied " + force);
         forces.x += force.x;
         forces.z += force.z;
         rigidbody.AddForce(0, force.y, 0, ForceMode.Impulse);
     }
 
-    public RaycastHit RayCastToMouse()
+    public RaycastHit RayCastToMouse(LayerMask mask)
     {
         RaycastHit hit;
         //will want to augment this when adding controller support
         Ray rayToFloor = Camera.main.ScreenPointToRay(
             new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y));
         Debug.DrawRay(rayToFloor.origin, rayToFloor.direction * 1000f, Color.red, 1);
-        Physics.Raycast(rayToFloor, out hit, 1000f, groundMask, QueryTriggerInteraction.Collide);
+        Physics.Raycast(rayToFloor, out hit, 1000f, mask, QueryTriggerInteraction.Collide);
 
         //Make it so that when player is on lower ground and mouse clicks over higher ground, they y position of the hit
         //will be at the player's feet's y position
@@ -157,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Probably want to add coyote time + buffered jumps as well
 
-        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask))
+        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask | enemyMask))
         {
             Debug.Log("jump");
             isJumping = true;
@@ -179,6 +190,10 @@ public class PlayerMovement : MonoBehaviour
     //Will probably change the input to take in context in order to have automatic fire
     public void OnAttack()
     {
+        if (PauseMenu.gameIsPaused)
+        {
+            return;
+        }
         Debug.Log("attack");
         //Obviously need to augment this up when adding more weapons
         foreach (Transform weapon in weaponHolder)
@@ -186,5 +201,6 @@ public class PlayerMovement : MonoBehaviour
             weapon.gameObject.GetComponent<Weapon>().Attack();
         }
     }
+
     #endregion
 }
