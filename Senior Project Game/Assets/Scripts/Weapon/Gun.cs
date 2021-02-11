@@ -23,7 +23,7 @@ public class Gun : Weapon
             if (player.isGrounded)
             {
                 //If you are shooting somewhere lower than your feet, you will shoot at the point + 1/4 player model height
-                if (point.y < player.groundCheck.position.y - 0.1f)
+                if (point.y < player.groundCheck.position.y)
                 {
                     point.y += (player.transform.position.y - player.groundCheck.position.y) / 2f;
                 }

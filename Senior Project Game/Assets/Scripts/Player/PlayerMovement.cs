@@ -78,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
 
         //Better movement code
         Vector3 horizontalMove = move + dash - rigidbody.velocity;
-        horizontalMove.y = 0;
         UpdateForces(horizontalMove);
 
 
@@ -112,16 +111,16 @@ public class PlayerMovement : MonoBehaviour
     
     private void UpdateForces(Vector3 movement)
     {
-        Debug.Log(rigidbody.velocity);
+        movement.y = 0;
         rigidbody.AddForce(movement, ForceMode.VelocityChange);
-        rigidbody.AddForce(forces, ForceMode.VelocityChange);
         rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
+        rigidbody.AddForce(forces, ForceMode.VelocityChange);
         forces *= forceFallOffFactor;
-        Debug.Log(rigidbody.velocity);
     }
 
     public void ApplyForce(Vector3 force)
     {
+        Debug.Log("force being applied " + force);
         forces.x += force.x;
         forces.z += force.z;
         rigidbody.AddForce(0, force.y, 0, ForceMode.Impulse);
