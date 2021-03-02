@@ -23,10 +23,9 @@ public abstract class Enemy : MonoBehaviour
     public float corpseResilience = 0.2f;
 
     private Renderer renderer;
-    [SerializeField]
-    private Color deadColor = Color.grey;
+    private Color deadColor = Color.Lerp(Color.grey, Color.white, 0.75f);
     private Color healthyColor;
-    private bool isDead = false;
+    public bool isDead = false;
     private Transform target;
     private Vector3 forces;
     private Rigidbody rigidbody;

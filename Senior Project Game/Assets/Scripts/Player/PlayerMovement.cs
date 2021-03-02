@@ -9,7 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public float dashSpeed = 20f;
     public float dashLength = 0.5f;
     public float dashCooldown = 0.5f;
+    public float dashStamina = 2f;
     public float jumpPower = 10f;
+    public float jumpStamina = 3f;
     public float gravity = -9.8f;
     public float forceFallOffFactor = 0.5f;
 
@@ -33,12 +35,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDirection;
     private Rigidbody rigidbody;
 
+    private Player playerInfo;
+
 
     void Start()
     {
         rigidbody = this.GetComponent<Rigidbody>();
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
+        playerInfo = this.GetComponent<Player>();
 
         //Both enemies and the ground will count as mask for jumping and grounded purposes
         groundMask = LayerMask.GetMask("Ground");
@@ -163,13 +168,17 @@ public class PlayerMovement : MonoBehaviour
     }
     public void OnJump()
     {
+        //If you don't have enough stamina;
+        if (playerInfo.stamina < jumpStamina)
+            return;
         //Trying to make jumping feel better when walking down ramps. There will be greater distance leeway allowed when
         //checking if you can perform a jump than in checking if you are grounded.
 
         //Probably want to add coyote time + buffered jumps as well
-
+        
         if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask | enemyMask))
         {
+            playerInfo.stamina -= jumpStamina;
             Debug.Log("jump");
             isJumping = true;
         }
@@ -180,6 +189,11 @@ public class PlayerMovement : MonoBehaviour
         //If dash is currently on cooldown, you will not dash
         if (nextDashTime > Time.time)
             return;
+
+        //If you don't have enough stamina;
+        if (playerInfo.stamina < dashStamina)
+            return;
+        playerInfo.stamina -= dashStamina;
 
         Debug.Log("dashing");
         dashDirection = moveDirection;

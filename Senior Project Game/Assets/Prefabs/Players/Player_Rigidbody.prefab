@@ -367,12 +367,11 @@ MonoBehaviour:
   dashSpeed: 20
   dashLength: 0.2
   dashCooldown: 0.5
+  dashStamina: 2
   jumpPower: 20
+  jumpStamina: 3
   gravity: -30
   forceFallOffFactor: 0.5
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
   groundCheck: {fileID: 7207760002283820174}
   groundDistance: 0.2
   weaponHolder: {fileID: 7207760002569804844}
@@ -392,3 +391,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 25
   health: 25
+  maxStamina: 10
+  stamina: 10
+  staminaRegenRate: 1
