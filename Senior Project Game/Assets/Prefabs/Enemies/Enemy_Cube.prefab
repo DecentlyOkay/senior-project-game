@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2937847041866307557}
   m_Layer: 10
   m_Name: Enemy_Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c8250c6c9e2640c4fa7f5500a0651384, type: 2}
+  - {fileID: 2100000, guid: 6b8e69fa4661ae547b5e654a3395eeb2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,14 +129,11 @@ MonoBehaviour:
   maxHealth: 5
   health: 5
   damage: 1
-  nextContactDamageTime: 0
-  timeBetweenContactDamage: 1
   forceFallOffFactor: 0.5
-  groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
+  groundDistance: 0.3
   isGrounded: 0
   deathTimer: 2
-  corpseResilience: 0.2
-  deadColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  corpseResilience: 0.1
+  dissolveSpeed: 1
+  isDead: 0
+  target: {fileID: 0}

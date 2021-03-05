@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(newRotation);
     }
 
-    public void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy")) {
@@ -35,8 +35,8 @@ public class Projectile : MonoBehaviour
             enemy.ApplyForce(this.direction.normalized * knockback);
 
             //For testing
-            //enemy.ApplyForce(new Vector3(0, 20, 0));
-
+            enemy.ApplyForce(new Vector3(0, 100, 0));
+            Debug.Log(enemy.rigidbody.velocity);
             enemy.ApplyDamage(damage);
             Debug.Log("Enemy health: " + enemy.health);
         }

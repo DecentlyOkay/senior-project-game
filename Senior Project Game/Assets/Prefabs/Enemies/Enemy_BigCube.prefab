@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 1359320964960507131}
   - component: {fileID: 1359320964960507130}
   - component: {fileID: 1359320964960507134}
-  - component: {fileID: 1359320964960507129}
+  - component: {fileID: 481206098959737244}
   m_Layer: 10
   m_Name: Enemy_BigCube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8a8585445dd452e4e9ca1ce528fa1c7b, type: 2}
+  - {fileID: 2100000, guid: 914969211a578ff42b0dbee5e9cd6eb1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +113,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1359320964960507129
+--- !u!114 &481206098959737244
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,21 +122,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1359320964960507128}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 945734792daa6ff448cd9b8f893cba56, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c9404f87cd8eaa49b52869bfbe348bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
   maxHealth: 10
   health: 10
   damage: 2
-  nextContactDamageTime: 0
-  timeBetweenContactDamage: 1
   forceFallOffFactor: 0.5
   groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
   isGrounded: 0
   deathTimer: 5
-  corpseResilience: 0.2
-  deadColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  corpseResilience: 0.1
+  dissolveSpeed: 1
+  isDead: 0
+  spawnPrefab: {fileID: 2937847041866307557, guid: 059e7dbf57b2f7048a23afae177215d2, type: 3}
+  spawnCount: 4

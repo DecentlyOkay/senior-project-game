@@ -9,9 +9,6 @@ public class PauseMenu : MonoBehaviour
     public static bool gameIsPaused = false;
     public GameObject pauseMenuUI;
 
-    [SerializeField]
-    private string mainMenu = "MainMenu";
-
     public void Pause()
     {
         gameIsPaused = true;
@@ -40,6 +37,6 @@ public class PauseMenu : MonoBehaviour
     public void LoadMainMenu()
     {
         Resume();
-        SceneManager.LoadScene(mainMenu);
+        SceneManager.LoadScene("MainMenu");
     }
 }

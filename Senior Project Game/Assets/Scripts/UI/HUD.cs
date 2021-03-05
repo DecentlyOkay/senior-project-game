@@ -7,8 +7,12 @@ public class HUD : MonoBehaviour
 {
     public Slider healthbar;
     public Slider staminabar;
-    public Player player;
+    private Player player;
 
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+    }
 
     public void FixedUpdate()
     {

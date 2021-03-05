@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed;
-    public GameObject target;
+    private Transform target;
 
     private Transform cameraTransform;
 
@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         cameraTransform = this.GetComponent<Transform>().parent;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void FixedUpdate()
@@ -21,6 +22,6 @@ public class CameraController : MonoBehaviour
         {
             return;
         }
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, target.transform.position, Time.deltaTime * moveSpeed);
+        cameraTransform.position = Vector3.Lerp(cameraTransform.position, target.position, Time.deltaTime * moveSpeed);
     }
 }

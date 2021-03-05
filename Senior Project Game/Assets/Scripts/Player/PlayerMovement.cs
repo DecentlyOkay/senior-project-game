@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 0.5f;
     public float dashStamina = 2f;
     public float jumpPower = 10f;
-    public float jumpStamina = 3f;
+    public float jumpStamina = 2f;
     public float gravity = -9.8f;
     public float forceFallOffFactor = 0.5f;
 
@@ -37,17 +37,19 @@ public class PlayerMovement : MonoBehaviour
 
     private Player playerInfo;
 
-
-    void Start()
+    private void Awake()
     {
         rigidbody = this.GetComponent<Rigidbody>();
-        moveDirection = Vector3.zero;
-        forces = Vector3.zero;
         playerInfo = this.GetComponent<Player>();
-
+        this.tag = "Player";
         //Both enemies and the ground will count as mask for jumping and grounded purposes
         groundMask = LayerMask.GetMask("Ground");
         enemyMask = LayerMask.GetMask("Enemy");
+    }
+    void Start()
+    {
+        moveDirection = Vector3.zero;
+        forces = Vector3.zero;
     }
 
     //Will want to move these to separate methods

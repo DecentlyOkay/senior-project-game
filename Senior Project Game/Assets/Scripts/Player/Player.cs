@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public float stamina = 10f;
     public float staminaRegenRate = 1f; //per second
 
+    private bool isDead = false;
+
     public void FixedUpdate()
     {
         stamina += Time.fixedDeltaTime * staminaRegenRate;
@@ -21,10 +23,9 @@ public class Player : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Enemy enemy = other.GetComponent<Enemy>();
-            if(!enemy.isDead && enemy.nextContactDamageTime <= Time.time)
+            if(!enemy.isDead)
             {
-                enemy.nextContactDamageTime = Time.time + enemy.timeBetweenContactDamage;
-                ApplyDamage(enemy.damage);
+                ApplyDamage(enemy.damage * Time.deltaTime);
                 Debug.Log("Player health: " + health);
             }
         }
@@ -32,14 +33,19 @@ public class Player : MonoBehaviour
     public void ApplyDamage(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
             Die();
         }
     }
     public void Die()
     {
+        isDead = true;
         Debug.Log("You died");
         Destroy(this.gameObject);
+        //Disable pause menu when you dead
+        GameObject.FindObjectOfType<PauseMenu>().gameObject.SetActive(false);
+        //Show death menu instead
+        GameObject.FindObjectOfType<DeathMenu>().Display();
     }
 }
