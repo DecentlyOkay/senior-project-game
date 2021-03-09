@@ -11,38 +11,38 @@ public abstract class Enemy : MonoBehaviour
     public float damage = 1f;
     public float forceFallOffFactor = 0.5f;
 
-
     public float groundDistance = 0.4f;
-    private LayerMask groundMask;
-    private LayerMask enemyMask;
+    protected LayerMask groundMask;
+    protected LayerMask enemyMask;
     public bool isGrounded;
 
     //Corpse will disappear after an additional corpseResilience proportion of health is dealt as damage, when dead, corpse takes %health as dmg per tick
     //Idea: shootup corpses for extra points
     public float corpseResilience = 0.2f;
 
-    private MeshRenderer meshRenderer;
-    private Color deadColor = Color.Lerp(Color.grey, Color.white, 0.75f);
-    private Color healthyColor;
+    protected MeshRenderer meshRenderer;
+    public Color deadColor = Color.Lerp(Color.grey, Color.white, 0.75f);
+    protected Color healthyColor;
     public float dissolveSpeed = 0.5f;
-    private float dissolveTimeElapsed = 0;
+    protected float dissolveTimeElapsed = 0;
     public bool isDead = false;
-    private bool isDissolving = false;
+    protected bool isDissolving = false;
 
     public Transform target;
-    private Vector3 forces;
-    public Rigidbody rigidbody;
+    protected Vector3 forces;
+    public new Rigidbody rigidbody;
 
-    private GameController gameController;
+    protected GameController gameController;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rigidbody = this.GetComponent<Rigidbody>();
-        this.tag = "Enemy";
         meshRenderer = this.GetComponent<MeshRenderer>();
         healthyColor = meshRenderer.material.color;
         groundMask = LayerMask.GetMask("Ground");
         enemyMask = LayerMask.GetMask("Enemy");
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        gameController.enemiesRemaining++;
     }
 
     public void Start()
@@ -52,16 +52,14 @@ public abstract class Enemy : MonoBehaviour
         {
             target = t.transform;
         }
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        gameController.enemiesRemaining++;
     }
-    public void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         Vector3 groundCheck = this.transform.position;
         groundCheck.y -= this.transform.localScale.y / 2;
         isGrounded = Physics.CheckSphere(groundCheck, groundDistance * transform.localScale.y, groundMask);
 
-        rigidbody.AddForce(forces, ForceMode.VelocityChange);
+        rigidbody.AddForce(forces, ForceMode.Impulse);
         forces *= forceFallOffFactor;
         if (isDead)
         {
@@ -135,11 +133,11 @@ public abstract class Enemy : MonoBehaviour
         gameController.enemiesRemaining--;
     }
 
-    private void UpdateColor(Color c)
+    protected void UpdateColor(Color c)
     {
         meshRenderer.material.color = c;
     }
-    private void Dissolve()
+    protected void Dissolve()
     {
         isDissolving = true;
 

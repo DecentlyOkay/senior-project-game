@@ -26,7 +26,6 @@ public class Player : MonoBehaviour
             if(!enemy.isDead)
             {
                 ApplyDamage(enemy.damage * Time.deltaTime);
-                Debug.Log("Player health: " + health);
             }
         }
     }

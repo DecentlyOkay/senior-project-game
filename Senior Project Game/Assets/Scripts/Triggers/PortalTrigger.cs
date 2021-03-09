@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PortalTrigger : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         this.gameObject.SetActive(false);
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Chaser_Enemy : Enemy
 {
-    public void FixedUpdate()
+    public override void FixedUpdate()
     {
         MoveTowardsTarget();
         base.FixedUpdate();
@@ -23,7 +23,13 @@ public class Chaser_Enemy : Enemy
     {
         if (target == null || isDead)
             return;
+        Vector3 targetMovement = target.GetComponent<PlayerMovement>().totalMoveDirection;
         Vector3 forceDirection = target.position - this.transform.position;
+        if(forceDirection.magnitude > 10f)
+        {
+            Debug.Log("correcting course");
+            forceDirection += targetMovement;
+        }
         forceDirection.y = 0;
         forceDirection = forceDirection.normalized;
         if (isGrounded)

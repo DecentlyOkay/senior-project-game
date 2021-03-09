@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cube_Enemy : Enemy
 {
-    public void FixedUpdate()
+    public override void FixedUpdate()
     {
         MoveTowardsTarget();
         base.FixedUpdate();

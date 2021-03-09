@@ -35,8 +35,8 @@ public class Projectile : MonoBehaviour
             enemy.ApplyForce(this.direction.normalized * knockback);
 
             //For testing
-            enemy.ApplyForce(new Vector3(0, 100, 0));
-            Debug.Log(enemy.rigidbody.velocity);
+            //enemy.ApplyForce(new Vector3(0, 100, 0));
+
             enemy.ApplyDamage(damage);
             Debug.Log("Enemy health: " + enemy.health);
         }

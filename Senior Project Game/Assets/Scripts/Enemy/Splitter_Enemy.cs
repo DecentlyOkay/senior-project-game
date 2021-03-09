@@ -6,7 +6,7 @@ public class Splitter_Enemy : Enemy
 {
     public Enemy spawnPrefab;
     public int spawnCount = 4;
-    public void FixedUpdate()
+    public override void FixedUpdate()
     {
         MoveTowardsTarget();
         base.FixedUpdate();
@@ -18,8 +18,8 @@ public class Splitter_Enemy : Enemy
         Destroy(this.gameObject);
         for(int i = 0; i < spawnCount; i++)
         {
-            Enemy enemy = Instantiate(spawnPrefab, this.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f)), Quaternion.identity);
-            enemy.ApplyForce(new Vector3(Random.Range(-5f, 5f), Random.Range(0f, 5f), Random.Range(-5f, 5f)));
+            Enemy enemy = Instantiate(spawnPrefab, this.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 1f), Random.Range(-1f, 1f)), Quaternion.identity);
+            enemy.ApplyForce(new Vector3(Random.Range(-10f, 10f), Random.Range(0f, 10f), Random.Range(-10f, 10f)));
         }
         
     }

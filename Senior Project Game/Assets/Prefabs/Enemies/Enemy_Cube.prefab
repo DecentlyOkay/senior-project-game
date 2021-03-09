@@ -129,11 +129,12 @@ MonoBehaviour:
   maxHealth: 5
   health: 5
   damage: 1
-  forceFallOffFactor: 0.5
+  forceFallOffFactor: 0.9
   groundDistance: 0.3
   isGrounded: 0
-  deathTimer: 2
   corpseResilience: 0.1
+  deadColor: {r: 0.875, g: 0.875, b: 0.875, a: 1}
   dissolveSpeed: 1
   isDead: 0
   target: {fileID: 0}
+  rigidbody: {fileID: 0}

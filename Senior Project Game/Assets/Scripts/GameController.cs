@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Debug.Log(enemiesRemaining);
+        //Debug.Log(enemiesRemaining);
         if(!portalActivated && enemiesRemaining == 0)
         {
             portalActivated = true;

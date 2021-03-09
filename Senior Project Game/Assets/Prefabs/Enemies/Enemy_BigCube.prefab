@@ -129,12 +129,14 @@ MonoBehaviour:
   maxHealth: 10
   health: 10
   damage: 2
-  forceFallOffFactor: 0.5
+  forceFallOffFactor: 0.9
   groundDistance: 0.4
   isGrounded: 0
-  deathTimer: 5
   corpseResilience: 0.1
+  deadColor: {r: 0.875, g: 0.875, b: 0.875, a: 1}
   dissolveSpeed: 1
   isDead: 0
+  target: {fileID: 0}
+  rigidbody: {fileID: 0}
   spawnPrefab: {fileID: 2937847041866307557, guid: 059e7dbf57b2f7048a23afae177215d2, type: 3}
   spawnCount: 4

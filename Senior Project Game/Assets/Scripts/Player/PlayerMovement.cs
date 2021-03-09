@@ -33,7 +33,8 @@ public class PlayerMovement : MonoBehaviour
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
     private Vector3 dashDirection;
     private Vector3 moveDirection;
-    private Rigidbody rigidbody;
+    public Vector3 totalMoveDirection;
+    private new Rigidbody rigidbody;
 
     private Player playerInfo;
 
@@ -86,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             dash = dashDirection * dashSpeed;
 
         }
-
+        totalMoveDirection = move + dash;
         //Better movement code
         Vector3 horizontalMove = move + dash - rigidbody.velocity;
         UpdateForces(horizontalMove);
@@ -133,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         movement.y = 0;
         rigidbody.AddForce(movement, ForceMode.VelocityChange);
         rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
-        rigidbody.AddForce(forces, ForceMode.VelocityChange);
+        rigidbody.AddForce(forces, ForceMode.Impulse);
         forces *= forceFallOffFactor;
     }
 
