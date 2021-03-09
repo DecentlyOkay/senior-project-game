@@ -29,6 +29,7 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("collided with " + collision.gameObject);
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy")) {
             Enemy enemy = other.GetComponent<Enemy>();

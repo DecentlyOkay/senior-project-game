@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2588868997511246611}
   - component: {fileID: 2588868997511246610}
   - component: {fileID: 2588868997511246613}
+  - component: {fileID: 8413138331401222194}
   m_Layer: 0
   m_Name: BattleTrigger
   m_TagString: Untagged
@@ -57,3 +58,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 122c19c794b318c4e9f3e678f454d5a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8413138331401222194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2588868997511246608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f92b1518a4e2e045b4e3edc31dc09ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Defeat\nthe enemies!

@@ -27,8 +27,14 @@ public class Gun : Weapon
                 {
                     point.y += (player.transform.position.y - player.groundCheck.position.y) / 2f;
                 }
-                //Will shoot straight when grounded and aiming at player level, will want to add to this later if you want to
+                
+                else if (point.y > player.groundCheck.position.y + 0.05f)
+                {
+                    point.y += (player.transform.position.y - player.groundCheck.position.y);
+                }
+                //Will shoot straight when grounded and aiming at player level, will want to add to this later (see above) if you want to
                 //aim at higher places on walls while grounded
+                //Will also want to allow you to shoot at enemies when raycast hits them
                 else
                 {
                     point.y = player.transform.position.y;
@@ -55,10 +61,11 @@ public class Gun : Weapon
 
         Ray shootRay = new Ray(this.transform.position, direction);
         Debug.DrawRay(shootRay.origin, shootRay.direction * 100f, Color.green, 1);
-        foreach (Collider collider in player.GetComponents<Collider>())
-        {
-            Physics.IgnoreCollision(collider, projectile.GetComponent<Collider>());
-        }
+        //Don't need this anymore, as bullet layer will not collide with player layer
+        //foreach (Collider collider in player.GetComponents<Collider>())
+        //{
+        //    Physics.IgnoreCollision(collider, projectile.GetComponent<Collider>());
+        //}
         projectile.FireProjectile(shootRay);
     }
 }
