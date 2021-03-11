@@ -7,9 +7,34 @@ public class DeathMenu : MonoBehaviour
 {
     public void Display()
     {
-        foreach(Transform child in this.transform)
+        StartCoroutine(ActivateUI());
+    }
+
+    private IEnumerator ActivateUI()
+    {
+        foreach (Transform child in this.transform)
         {
-            child.gameObject.SetActive(true);
+            child.gameObject.SetActive(true); 
+            //bruh
+            foreach(Transform childchild in child)
+            {
+                if (childchild.gameObject.name.Equals("DeathText"))
+                {
+                    childchild.gameObject.SetActive(true);
+                }
+                else
+                {
+                    childchild.gameObject.SetActive(false);
+                }
+            }
+        }
+        yield return new WaitForSecondsRealtime(2f);
+        foreach (Transform child in this.transform)
+        {
+            foreach (Transform childchild in child)
+            {
+                childchild.gameObject.SetActive(true);
+            }
         }
     }
 

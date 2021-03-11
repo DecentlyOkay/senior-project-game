@@ -10,7 +10,6 @@ public class Chaser_Enemy : Enemy
         base.FixedUpdate();
         Vector3 horizontalVelocity = rigidbody.velocity;
         horizontalVelocity.y = 0;
-        Debug.Log(isGrounded + " " + horizontalVelocity.magnitude);
         if(horizontalVelocity.magnitude > 20)
         {
             horizontalVelocity = horizontalVelocity.normalized * 20;
@@ -27,7 +26,6 @@ public class Chaser_Enemy : Enemy
         Vector3 forceDirection = target.position - this.transform.position;
         if(forceDirection.magnitude > 10f)
         {
-            Debug.Log("correcting course");
             forceDirection += targetMovement;
         }
         forceDirection.y = 0;
