@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextFireTime: 0
-  fireRate: 100
+  fireRate: 5
   projectilePrefab: {fileID: 377584499542844201, guid: e915a8ef30b80ce48ab86287882b81a5, type: 3}
   recoil: 0
 --- !u!1 &7207760003383047540
