@@ -13,31 +13,45 @@ public class Gun : Weapon
     {
         player = GetComponentInParent<PlayerMovement>();
     }
+
+    //Probably want to move code to get aiming position to Weapon class
     public override void Attack()
     {
-        RaycastHit mouseLoc = player.RayCastToMouse(LayerMask.GetMask("Ground"));
+        RaycastHit mouseLoc = player.RayCastToMouse(LayerMask.GetMask("Ground") | LayerMask.GetMask("Enemy"));
         if(mouseLoc.collider != null)
         {
             Vector3 point = mouseLoc.point;
 
+
             if (player.isGrounded)
             {
-                //If you are shooting somewhere lower than your feet, you will shoot at the point + 1/4 player model height
                 if (point.y < player.groundCheck.position.y - 0.05f)
                 {
-                    point.y += (player.transform.position.y - player.groundCheck.position.y) / 2f;
+                    //This is for aiming down ramps
+                    point.y += (player.weaponHolder.position.y - player.groundCheck.position.y);
+                    //If aiming at enemy, y will be closer to enemy's center
+                    if (mouseLoc.collider.gameObject.CompareTag("Enemy"))
+                    {
+                        point.y = Mathf.Lerp(point.y, mouseLoc.collider.transform.position.y, 0.5f);
+                    }
                 }
                 
                 else if (point.y > player.groundCheck.position.y + 0.05f)
                 {
-                    point.y += (player.transform.position.y - player.groundCheck.position.y);
+                    //This is for aiming up ramps
+                    point.y += (player.weaponHolder.position.y - player.groundCheck.position.y);
+                    //If aiming at enemy, y will be closer to enemy's center
+                    if (mouseLoc.collider.gameObject.CompareTag("Enemy"))
+                    {
+                        point.y = Mathf.Lerp(point.y, mouseLoc.collider.transform.position.y, 0.5f);
+                    }
                 }
                 //Will shoot straight when grounded and aiming at player level, will want to add to this later (see above) if you want to
                 //aim at higher places on walls while grounded
                 //Will also want to allow you to shoot at enemies when raycast hits them
                 else
                 {
-                    point.y = player.transform.position.y;
+                    point.y = player.weaponHolder.position.y;
                 }
             }
             

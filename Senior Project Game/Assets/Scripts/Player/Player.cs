@@ -12,12 +12,17 @@ public class Player : MonoBehaviour
 
     private bool isDead = false;
 
+    private void Start()
+    {
+        health = maxHealth;
+    }
+
     public void FixedUpdate()
     {
         stamina += Time.fixedDeltaTime * staminaRegenRate;
         stamina = Mathf.Min(stamina, maxStamina);
     }
-    public void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         GameObject other = collision.gameObject;
         if (other.CompareTag("Enemy"))
@@ -27,6 +32,14 @@ public class Player : MonoBehaviour
             {
                 ApplyDamage(enemy.damage * Time.deltaTime);
             }
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject other = collision.gameObject;
+        if (other.CompareTag("Void"))
+        {
+            Die();
         }
     }
     public void ApplyDamage(float damage)
@@ -39,7 +52,10 @@ public class Player : MonoBehaviour
     }
     public void Die()
     {
+        if (isDead)
+            return;
         isDead = true;
+        health = 0f;
         Debug.Log("You died");
         Destroy(this.gameObject);
         //Disable pause menu when you dead

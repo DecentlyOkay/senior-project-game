@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  maxHealth: 5
-  health: 5
+  maxHealth: 3
+  health: 3
   damage: 0
   forceFallOffFactor: 0
   groundDistance: 0.4

@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 totalMoveDirection;
     private new Rigidbody rigidbody;
 
+    private bool isAttacking = false;
+
     private Player playerInfo;
 
     private void Awake()
@@ -96,6 +98,9 @@ public class PlayerMovement : MonoBehaviour
         //Old movement code
         //SetHorizontalVelocity(move + dash);
         //UpdateVelocity(0, gravity * Time.fixedDeltaTime, 0);
+
+
+        DoAttack();
     }
 
     private void Update()
@@ -163,10 +168,24 @@ public class PlayerMovement : MonoBehaviour
         return hit;
     }
 
-    #region Handling Inputs
-    public void OnMove(InputValue input)
+    private void DoAttack()
     {
-        Vector2 inputVec = input.Get<Vector2>();
+        if (!isAttacking)
+            return;
+        foreach (Transform w in weaponHolder)
+        {
+            Weapon weapon = w.GetComponent<Weapon>();
+            if (weapon.nextFireTime > Time.time)
+                return;
+            weapon.nextFireTime = Time.time + 1f / weapon.fireRate;
+            weapon.Attack();
+        }
+    }
+
+    #region Handling Inputs
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        Vector2 inputVec = context.action.ReadValue<Vector2>();
         moveDirection = new Vector3(inputVec.x, 0, inputVec.y);
     }
     public void OnJump()
@@ -179,7 +198,7 @@ public class PlayerMovement : MonoBehaviour
 
         //Probably want to add coyote time + buffered jumps as well
         
-        if (/*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask | enemyMask))
+        if (/*not currently jumping*/ !isJumping && /*isGrounded*/ Physics.CheckSphere(groundCheck.position, groundDistance + 0.1f, groundMask | enemyMask))
         {
             playerInfo.stamina -= jumpStamina;
             Debug.Log("jump");
@@ -204,19 +223,16 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
     }
 
-    //Will probably change the input to take in context in order to have automatic fire
-    public void OnAttack()
+    public void OnAttack(InputAction.CallbackContext context)
     {
         if (PauseMenu.gameIsPaused)
         {
             return;
         }
-        Debug.Log("attack");
-        //Obviously need to augment this up when adding more weapons
-        foreach (Transform weapon in weaponHolder)
-        {
-            weapon.gameObject.GetComponent<Weapon>().Attack();
-        }
+
+        Debug.Log("started: " + context.started + " " + context.action.ReadValueAsObject() + " canceled : " + context.canceled + " performed " + context.performed + " duration: " + context.duration);
+        isAttacking = context.action.ReadValue<float>() > 0;
+        Debug.Log(isAttacking + " " + context.action.ReadValue<float>());
     }
 
     #endregion

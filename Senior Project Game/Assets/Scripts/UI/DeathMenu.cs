@@ -28,7 +28,7 @@ public class DeathMenu : MonoBehaviour
                 }
             }
         }
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(1f);
         foreach (Transform child in this.transform)
         {
             foreach (Transform childchild in child)

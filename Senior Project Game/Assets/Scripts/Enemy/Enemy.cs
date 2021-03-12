@@ -52,6 +52,7 @@ public abstract class Enemy : MonoBehaviour
         {
             target = t.transform;
         }
+        health = maxHealth;
     }
     public virtual void FixedUpdate()
     {
@@ -79,6 +80,15 @@ public abstract class Enemy : MonoBehaviour
             {
                 Dissolve();
             }
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject other = collision.gameObject;
+        if (other.CompareTag("Void"))
+        {
+            Die();
+            Dissolve();
         }
     }
     public virtual void MoveTowardsTarget()
