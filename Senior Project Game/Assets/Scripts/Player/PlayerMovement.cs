@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform weaponHolder;
     public Transform models;
 
+    private int weaponIndex = 0;
+    private Weapon currentWeapon;
+
     //So I guess the plan is to store forces from explosions/recoil here and handle them manually
     private Vector3 forces;
 
@@ -53,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
+
+        currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();
     }
 
     //Will want to move these to separate methods
@@ -141,6 +146,8 @@ public class PlayerMovement : MonoBehaviour
         rigidbody.AddForce(0, gravity * Time.fixedDeltaTime, 0, ForceMode.VelocityChange);
         rigidbody.AddForce(forces, ForceMode.Impulse);
         forces *= forceFallOffFactor;
+        if (forces.magnitude < 10f)
+            forces *= Mathf.Pow(forces.magnitude / 10f, 2);
     }
 
     public void ApplyForce(Vector3 force)
@@ -172,14 +179,29 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isAttacking)
             return;
-        foreach (Transform w in weaponHolder)
-        {
-            Weapon weapon = w.GetComponent<Weapon>();
-            if (weapon.nextFireTime > Time.time)
-                return;
-            weapon.nextFireTime = Time.time + 1f / weapon.fireRate;
-            weapon.Attack();
-        }
+        if (currentWeapon.nextFireTime > Time.time)
+            return;
+        currentWeapon.nextFireTime = Time.time + 1f / currentWeapon.fireRate;
+        currentWeapon.Attack();
+        //foreach (Transform w in weaponHolder)
+        //{
+        //    Debug.Log(w);
+        //    Weapon weapon = w.GetComponent<Weapon>();
+        //    if (weapon.nextFireTime > Time.time)
+        //        return;
+        //    weapon.nextFireTime = Time.time + 1f / weapon.fireRate;
+        //    weapon.Attack();
+        //}
+    }
+
+    private void SwitchWeapon(int change)
+    {
+        weaponHolder.GetChild(weaponIndex).gameObject.SetActive(false);
+        weaponIndex += change;
+        //if index goes below 0 or above max index
+        weaponIndex = (weaponIndex + weaponHolder.childCount) % weaponHolder.childCount;
+        weaponHolder.GetChild(weaponIndex).gameObject.SetActive(true);
+        currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();
     }
 
     #region Handling Inputs
@@ -233,6 +255,30 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("started: " + context.started + " " + context.action.ReadValueAsObject() + " canceled : " + context.canceled + " performed " + context.performed + " duration: " + context.duration);
         isAttacking = context.action.ReadValue<float>() > 0;
         Debug.Log(isAttacking + " " + context.action.ReadValue<float>());
+    }
+    public void OnNextWeapon(InputAction.CallbackContext context)
+    {
+        if (PauseMenu.gameIsPaused)
+        {
+            return;
+        }
+
+        if (context.performed)
+        {
+            SwitchWeapon(1);
+        }
+    }
+    public void OnPreviousWeapon(InputAction.CallbackContext context)
+    {
+        if (PauseMenu.gameIsPaused)
+        {
+            return;
+        }
+
+        if (context.performed)
+        {
+            SwitchWeapon(-1);
+        }
     }
 
     #endregion

@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     void FixedUpdate()
     {
         //Debug.Log(enemiesRemaining);
-        if(!portalActivated && enemiesRemaining == 0)
+        if(playerInfo != null && !portalActivated && enemiesRemaining == 0)
         {
             portalActivated = true;
             playerInfo.GetComponentInChildren<TextMeshProUGUI>().text = "Continue through\nthe portal!";

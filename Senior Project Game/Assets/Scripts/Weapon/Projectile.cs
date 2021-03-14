@@ -21,10 +21,21 @@ public class Projectile : MonoBehaviour
         this.transform.position = rayDirection.origin;
         RotateInShootDirection();
     }
-    void RotateInShootDirection()
+    public void FireProjectile(Ray rayDirection, Vector3 spread)
+    {
+        FireProjectile(rayDirection);
+        AddSpread(spread);
+    }
+    private void RotateInShootDirection()
     {
         Vector3 newRotation = Vector3.RotateTowards(transform.forward, direction, (float)(2*System.Math.PI), 0.0f);
         transform.rotation = Quaternion.LookRotation(newRotation);
+    }
+
+    private void AddSpread(Vector3 spread)
+    {
+        transform.Rotate(spread);
+        this.direction = transform.forward;
     }
 
     void OnCollisionEnter(Collision collision)

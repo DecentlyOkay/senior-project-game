@@ -19,8 +19,7 @@ public class Player : MonoBehaviour
 
     public void FixedUpdate()
     {
-        stamina += Time.fixedDeltaTime * staminaRegenRate;
-        stamina = Mathf.Min(stamina, maxStamina);
+        RecoverStamina(Time.fixedDeltaTime * staminaRegenRate);
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -49,6 +48,12 @@ public class Player : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void RecoverStamina(float amount)
+    {
+        stamina += amount;
+        stamina = Mathf.Min(stamina, maxStamina);
     }
     public void Die()
     {
