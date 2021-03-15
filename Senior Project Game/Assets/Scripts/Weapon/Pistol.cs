@@ -12,7 +12,7 @@ public class Pistol : Weapon
             return;
             
         Shoot(point);
-        player.ApplyForce(-(point - this.transform.position).normalized * recoil);
+        ApplyRecoil(point);
     }
 
     //Idea for making aiming smarter. i.e. when aiming up ramps and when aiming at floor if cursor is really close to player
@@ -35,6 +35,7 @@ public class Pistol : Weapon
         //{
         //    Physics.IgnoreCollision(collider, projectile.GetComponent<Collider>());
         //}
-        projectile.FireProjectile(shootRay);
+        Vector3 spreadAngle = GetSpreadAngle();
+        projectile.FireProjectile(shootRay, spreadAngle);
     }
 }

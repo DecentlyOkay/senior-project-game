@@ -13,7 +13,8 @@ public class Shotgun : Weapon
             return;
 
         Shoot(point);
-        player.ApplyForce(-(point - this.transform.position).normalized * recoil);
+        ApplyRecoil(point);
+ 
     }
 
     private void Shoot(Vector3 point)
@@ -25,7 +26,7 @@ public class Shotgun : Weapon
         for(int i = 0; i < numBullets; i++)
         {
             Projectile projectile = Instantiate(projectilePrefab);
-            Vector3 spreadAngle = new Vector3(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y), Random.Range(-spread.z, spread.z));
+            Vector3 spreadAngle = GetSpreadAngle();
             projectile.FireProjectile(shootRay, spreadAngle);
         }
         

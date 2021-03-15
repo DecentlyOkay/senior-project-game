@@ -20,6 +20,7 @@ public class Explodable : MonoBehaviour
     public void CreateExplosion()
     {
         Instantiate(explosionPrefab, this.transform.position, Quaternion.identity);
+        Debug.Log("exploding");
         //Will player get double processed because of its two colliders? Yes
         bool playerSeen = false;
         foreach (Collider other in Physics.OverlapSphere(this.transform.position, radius))

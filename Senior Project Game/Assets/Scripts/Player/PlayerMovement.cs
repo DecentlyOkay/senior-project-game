@@ -252,9 +252,9 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        Debug.Log("started: " + context.started + " " + context.action.ReadValueAsObject() + " canceled : " + context.canceled + " performed " + context.performed + " duration: " + context.duration);
+        //Debug.Log("started: " + context.started + " " + context.action.ReadValueAsObject() + " canceled : " + context.canceled + " performed " + context.performed + " duration: " + context.duration);
         isAttacking = context.action.ReadValue<float>() > 0;
-        Debug.Log(isAttacking + " " + context.action.ReadValue<float>());
+        //Debug.Log(isAttacking + " " + context.action.ReadValue<float>());
     }
     public void OnNextWeapon(InputAction.CallbackContext context)
     {

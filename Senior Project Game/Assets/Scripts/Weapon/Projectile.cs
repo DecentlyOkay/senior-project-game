@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
     public float damage = 1f;
     public float knockback = 0f;
 
-    private Vector3 direction;
+    protected Vector3 direction;
 
     void FixedUpdate()
     {
@@ -38,9 +38,9 @@ public class Projectile : MonoBehaviour
         this.direction = transform.forward;
     }
 
-    void OnCollisionEnter(Collision collision)
+    public virtual void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log("collided with " + collision.gameObject);
+        Debug.Log("collided with " + collision.gameObject);
         GameObject other = collision.gameObject;
         if(other.CompareTag("Enemy")) {
             Enemy enemy = other.GetComponent<Enemy>();

@@ -28,7 +28,7 @@ public abstract class Weapon : MonoBehaviour
             point = mouseLoc.point;
             if (player.isGrounded)
             {
-                if (point.y < player.groundCheck.position.y - 0.05f)
+                if (point.y < player.groundCheck.position.y - 0.1f)
                 {
                     //This is for aiming down ramps
                     point.y += (player.weaponHolder.position.y - player.groundCheck.position.y);
@@ -39,7 +39,7 @@ public abstract class Weapon : MonoBehaviour
                     }
                 }
 
-                else if (point.y > player.groundCheck.position.y + 0.05f)
+                else if (point.y > player.groundCheck.position.y + 0.1f)
                 {
                     //This is for aiming up ramps
                     point.y += (player.weaponHolder.position.y - player.groundCheck.position.y);
@@ -59,5 +59,17 @@ public abstract class Weapon : MonoBehaviour
             }
         }
         return point;
+    }
+
+    public Vector3 GetSpreadAngle()
+    {
+        return new Vector3(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y), Random.Range(-spread.z, spread.z));
+    }
+
+    public void ApplyRecoil(Vector3 point)
+    {
+        Vector3 force = -(point - this.transform.position).normalized * recoil;
+        force.y *= 0.1f;
+        player.ApplyForce(force);
     }
 }
