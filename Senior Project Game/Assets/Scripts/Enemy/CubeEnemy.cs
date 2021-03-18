@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cube_Enemy : Enemy
+public class CubeEnemy : Enemy
 {
     public override void FixedUpdate()
     {

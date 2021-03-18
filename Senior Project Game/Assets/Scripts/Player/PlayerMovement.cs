@@ -35,13 +35,15 @@ public class PlayerMovement : MonoBehaviour
     private float nextDashTime;
     //Might not want to keep direction fixed during dash, might be more fun for dash just to be a speed increase
     private Vector3 dashDirection;
-    private Vector3 moveDirection;
+    public Vector3 moveDirection;
     public Vector3 totalMoveDirection;
     private new Rigidbody rigidbody;
 
     private bool isAttacking = false;
 
     private Player playerInfo;
+
+    public Transform aimPoint;
 
     private void Awake()
     {
@@ -127,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LookAtMouse()
     {
-        RaycastHit mouseLoc = RayCastToMouse(groundMask);
+        RaycastHit mouseLoc = RayCastToMouse(groundMask | enemyMask);
         if (mouseLoc.collider != null)
         {
             Vector3 lookPoint = mouseLoc.point;
@@ -136,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
                 lookPoint.y = transform.position.y;
             }
             models.transform.LookAt(lookPoint);
+            aimPoint.position = mouseLoc.point;
         }
     }
     

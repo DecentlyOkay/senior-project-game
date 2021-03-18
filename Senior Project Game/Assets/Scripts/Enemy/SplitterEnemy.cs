@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Splitter_Enemy : Enemy
+public class SplitterEnemy : Enemy
 {
     public Enemy spawnPrefab;
     public int spawnCount = 4;

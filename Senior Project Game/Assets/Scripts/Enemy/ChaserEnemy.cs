@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Chaser_Enemy : Enemy
+public class ChaserEnemy : Enemy
 {
     public override void FixedUpdate()
     {
