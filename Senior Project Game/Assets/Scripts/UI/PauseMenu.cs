@@ -23,6 +23,10 @@ public class PauseMenu : MonoBehaviour
     }
     public void OnPause()
     {
+        if (gameIsPaused && !pauseMenuUI.gameObject.activeSelf)
+        {
+            return;
+        }
         Debug.Log("currently paused: " + gameIsPaused);
         if (gameIsPaused)
         {

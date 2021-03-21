@@ -23,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
     public Transform weaponHolder;
     public Transform models;
 
-    private int weaponIndex = 0;
     private Weapon currentWeapon;
 
     //So I guess the plan is to store forces from explosions/recoil here and handle them manually
@@ -59,7 +58,9 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
 
-        currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();
+        SwitchWeapon(0);
+
+        ToggleAimIndicator(PlayerData.aimIndicatorEnabled);
     }
 
     //Will want to move these to separate methods
@@ -141,6 +142,11 @@ public class PlayerMovement : MonoBehaviour
             aimPoint.position = mouseLoc.point;
         }
     }
+    public void ToggleAimIndicator(bool toggle)
+    {
+        PlayerData.aimIndicatorEnabled = toggle;
+        aimPoint.gameObject.SetActive(toggle);
+    }
     
     private void UpdateForces(Vector3 movement)
     {
@@ -199,12 +205,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void SwitchWeapon(int change)
     {
+        int weaponIndex = PlayerData.weaponIndex;
         weaponHolder.GetChild(weaponIndex).gameObject.SetActive(false);
-        weaponIndex += change;
-        //if index goes below 0 or above max index
-        weaponIndex = (weaponIndex + weaponHolder.childCount) % weaponHolder.childCount;
+        Debug.Log(PlayerData.gunsUnlocked[0]);
+        while(!PlayerData.gunsUnlocked[weaponIndex])
+        {
+            weaponIndex += change;
+            //if index goes below 0 or above max index
+            weaponIndex = (weaponIndex + weaponHolder.childCount) % weaponHolder.childCount;
+            break;
+        }
+
         weaponHolder.GetChild(weaponIndex).gameObject.SetActive(true);
         currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();
+        PlayerData.weaponIndex = weaponIndex;
     }
 
     #region Handling Inputs

@@ -15,8 +15,7 @@ public class ShooterEnemy : Enemy
 
     private bool isAttacking;
     public override void FixedUpdate()
-    {
-        Debug.Log(forceFallOffFactor);
+    { 
         base.FixedUpdate();
         if (target == null || isDead)
         {
@@ -45,10 +44,7 @@ public class ShooterEnemy : Enemy
             //This is so it doesn't take lots of knockback when standing still
             Vector3 horizontalVelocity = this.rigidbody.velocity;
             horizontalVelocity.y = 0;
-            if (horizontalVelocity.magnitude > 0)
-            {
-                horizontalVelocity *= 0.9f;
-            }
+            horizontalVelocity *= 0.9f;
             this.rigidbody.velocity = new Vector3(horizontalVelocity.x, this.rigidbody.velocity.y, horizontalVelocity.z);
         }
         

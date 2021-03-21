@@ -223,8 +223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5ac26c40163054b8889c760680be59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 20
+  radius: 8
   power: 5
-  upwardForce: 20
+  upwardForce: 15
   damage: 5
-  explosionPrefab: {fileID: 198917022394846920, guid: d4ae4bdce04e3aa45b75c3e78212a53a, type: 3}
+  explosionPrefab: {fileID: 198917022394846920, guid: 297840593fbcd40458ac96189bb5ddb2, type: 3}

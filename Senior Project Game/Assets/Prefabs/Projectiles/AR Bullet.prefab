@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  damage: 2
+  damage: 1
   knockback: 15
 --- !u!54 &-213918392283818163
 Rigidbody:
