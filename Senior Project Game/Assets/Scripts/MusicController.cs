@@ -4,9 +4,23 @@ using UnityEngine;
 
 public class MusicController : MonoBehaviour
 {
+
     private AudioSource music;
+
+    private static MusicController instance;
+    public static MusicController Instance { get { return instance; } }
+
     private void Awake()
     {
+        if(instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+
         DontDestroyOnLoad(this.gameObject);
         music = this.GetComponent<AudioSource>();
     }
