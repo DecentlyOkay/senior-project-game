@@ -207,14 +207,18 @@ public class PlayerMovement : MonoBehaviour
     {
         int weaponIndex = PlayerData.weaponIndex;
         weaponHolder.GetChild(weaponIndex).gameObject.SetActive(false);
-        Debug.Log(PlayerData.gunsUnlocked[0]);
-        while(!PlayerData.gunsUnlocked[weaponIndex])
+        Debug.Log("gun " + weaponIndex + " " + PlayerData.gunsUnlocked[weaponIndex]);
+        do
         {
             weaponIndex += change;
             //if index goes below 0 or above max index
             weaponIndex = (weaponIndex + weaponHolder.childCount) % weaponHolder.childCount;
-            break;
+
+            //only have 1 or 0 weapons unlocked, so we looped through all the weapons without finding on unlocked
+            if (weaponIndex == PlayerData.weaponIndex)
+                break;
         }
+        while (!PlayerData.gunsUnlocked[weaponIndex]);
 
         weaponHolder.GetChild(weaponIndex).gameObject.SetActive(true);
         currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();

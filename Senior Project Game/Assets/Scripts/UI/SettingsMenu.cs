@@ -6,10 +6,17 @@ using UnityEngine.UI;
 public class SettingsMenu : MonoBehaviour
 {
     public Toggle aimIndicator;
+    public Slider volumeSlider;
+    private MusicController music;
 
     private void Awake()
     {
         aimIndicator.isOn = PlayerData.aimIndicatorEnabled;
+        music = FindObjectOfType<MusicController>();
+        if(music != null)
+        {
+            volumeSlider.value = music.GetVolume() * volumeSlider.maxValue;
+        }
     }
     public void ToggleAimIndicator()
     {
@@ -17,6 +24,18 @@ public class SettingsMenu : MonoBehaviour
         if (player != null)
         {
             player.ToggleAimIndicator(aimIndicator.isOn);
+        }
+        else
+        {
+            PlayerData.aimIndicatorEnabled = aimIndicator.isOn;
+        }
+    }
+
+    public void ChangeVolume()
+    {
+        if(music != null)
+        {
+            music.SetVolume(volumeSlider.value / volumeSlider.maxValue);
         }
     }
 }
