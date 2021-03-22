@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
         if(playerInfo != null && !portalActivated && enemiesRemaining == 0)
         {
             portalActivated = true;
-            playerInfo.GetComponentInChildren<TextMeshProUGUI>().text = "Continue through\nthe portal!";
+            playerInfo.SetText("Continue through\nthe portal!");
             foreach(Transform child in this.transform)
             {
                 child.gameObject.SetActive(true);

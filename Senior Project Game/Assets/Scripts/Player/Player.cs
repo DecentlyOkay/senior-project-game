@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -67,5 +68,10 @@ public class Player : MonoBehaviour
         GameObject.FindObjectOfType<PauseMenu>().gameObject.SetActive(false);
         //Show death menu instead
         GameObject.FindObjectOfType<DeathMenu>().Display();
+    }
+
+    public void SetText(string message)
+    {
+        this.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = message;
     }
 }

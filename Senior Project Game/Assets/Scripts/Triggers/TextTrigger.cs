@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class TextTrigger : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class TextTrigger : MonoBehaviour
         if (!triggered && other.CompareTag("Player"))
         {
             triggered = true;
-            other.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = message;
+            other.gameObject.GetComponent<Player>().SetText(message);
         }
     }
 }

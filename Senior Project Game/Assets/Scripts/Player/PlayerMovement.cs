@@ -58,7 +58,11 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
 
+        //For when playerdata is not initialized
+        PlayerData.gunsUnlocked[0] = true;
+
         SwitchWeapon(0);
+        
 
         ToggleAimIndicator(PlayerData.aimIndicatorEnabled);
     }
