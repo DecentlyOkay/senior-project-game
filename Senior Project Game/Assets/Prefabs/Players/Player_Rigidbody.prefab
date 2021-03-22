@@ -606,7 +606,7 @@ MonoBehaviour:
   fireRate: 1
   projectilePrefab: {fileID: 377584499542844201, guid: 0ec4f715d56fe104195b9cdca5d64dcf, type: 3}
   recoil: 15
-  spread: {x: 5, y: 25, z: 0}
+  spread: {x: 0, y: 20, z: 0}
   numBullets: 10
 --- !u!1 &7207760003383047540
 GameObject:
@@ -834,7 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 454c5d2885f02ae4caa5d738487fb327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
+  moveSpeed: 10
   dashSpeed: 20
   dashLength: 0.2
   dashCooldown: 0.5

@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
 {
     public int enemiesRemaining = 0;
     public bool portalActivated = false;
+    public Transform closedPortal;
+    public Transform openPortal;
 
     private Player playerInfo;
 
@@ -22,10 +24,8 @@ public class GameController : MonoBehaviour
         {
             portalActivated = true;
             playerInfo.SetText("Continue through\nthe portal!");
-            foreach(Transform child in this.transform)
-            {
-                child.gameObject.SetActive(true);
-            }
+            closedPortal.gameObject.SetActive(false);
+            openPortal.gameObject.SetActive(true);
         }
     }
 

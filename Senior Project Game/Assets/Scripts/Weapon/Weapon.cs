@@ -35,7 +35,7 @@ public abstract class Weapon : MonoBehaviour
                     //If aiming at enemy, y will be closer to enemy's center
                     if (mouseLoc.collider.gameObject.CompareTag("Enemy"))
                     {
-                        point.y = Mathf.Lerp(point.y, mouseLoc.collider.transform.position.y, 0.5f);
+                        point.y = Mathf.Lerp(point.y, mouseLoc.collider.transform.position.y, 0.2f);
                     }
                 }
 
