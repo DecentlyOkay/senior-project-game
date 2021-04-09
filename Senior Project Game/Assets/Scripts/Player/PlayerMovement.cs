@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform models;
 
     private Weapon currentWeapon;
+    private TextMeshProUGUI weaponText;
 
     //So I guess the plan is to store forces from explosions/recoil here and handle them manually
     private Vector3 forces;
@@ -55,6 +57,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void Start()
     {
+        Debug.Log(GameObject.FindObjectOfType<HUD>());
+        weaponText = GameObject.FindObjectOfType<HUD>().GetComponentInChildren<TextMeshProUGUI>();
+        Debug.Log(weaponText);
         moveDirection = Vector3.zero;
         forces = Vector3.zero;
 
@@ -187,6 +192,12 @@ public class PlayerMovement : MonoBehaviour
         //}
         return hit;
     }
+    private void UpdateWeaponText()
+    {
+        if (weaponText == null)
+            return;
+        weaponText.text = "Current Weapon: " + currentWeapon.name;
+    }
 
     private void DoAttack()
     {
@@ -227,6 +238,7 @@ public class PlayerMovement : MonoBehaviour
         weaponHolder.GetChild(weaponIndex).gameObject.SetActive(true);
         currentWeapon = weaponHolder.GetChild(weaponIndex).GetComponent<Weapon>();
         PlayerData.weaponIndex = weaponIndex;
+        UpdateWeaponText();
     }
 
     #region Handling Inputs
@@ -303,6 +315,24 @@ public class PlayerMovement : MonoBehaviour
         if (context.performed)
         {
             SwitchWeapon(-1);
+        }
+    }
+
+    public void OnMouseWheel(InputAction.CallbackContext context)
+    {
+        Debug.Log("mouse wheel");
+        if (PauseMenu.gameIsPaused || !context.performed)
+        {
+            return;
+        }
+        float direction = context.ReadValue<float>();
+        if(direction > 0)
+        {
+            SwitchWeapon(-1);
+        }
+        else if(direction < 0)
+        {
+            SwitchWeapon(1);
         }
     }
 

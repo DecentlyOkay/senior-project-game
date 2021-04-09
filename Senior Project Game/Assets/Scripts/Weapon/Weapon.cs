@@ -61,7 +61,7 @@ public abstract class Weapon : MonoBehaviour
         return point;
     }
 
-    public Vector3 GetSpreadAngle()
+    public Vector3 GetRandomSpreadAngle()
     {
         return new Vector3(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y), Random.Range(-spread.z, spread.z));
     }

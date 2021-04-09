@@ -124,11 +124,11 @@ public abstract class Enemy : MonoBehaviour
             {
                 Die();
             }
-            //Corpse is destroyed (begin dissolving sequence)
-            else if(health <= -maxHealth * corpseResilience)
-            {
-                Dissolve();
-            }
+            ////Corpse is destroyed (begin dissolving sequence)
+            //else if(health <= -maxHealth * corpseResilience)
+            //{
+            //    Dissolve();
+            //}
         }
         else
         {
@@ -141,6 +141,7 @@ public abstract class Enemy : MonoBehaviour
         UpdateColor(deadColor);
         health = 0;
         gameController.enemiesRemaining--;
+        Dissolve();
     }
 
     protected void UpdateColor(Color c)

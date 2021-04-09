@@ -22,12 +22,12 @@ public class Shotgun : Weapon
         Vector3 direction = point - this.transform.position;
         Ray shootRay = new Ray(this.transform.position, direction);
         Debug.DrawRay(shootRay.origin, shootRay.direction * 100f, Color.green, 1);
-
+        Vector3 angleIncrement = spread * 2f / numBullets;
+        Vector3 startAngle = -spread;
         for(int i = 0; i < numBullets; i++)
         {
             Projectile projectile = Instantiate(projectilePrefab);
-            Vector3 spreadAngle = GetSpreadAngle();
-            projectile.FireProjectile(shootRay, spreadAngle);
+            projectile.FireProjectile(shootRay, startAngle + angleIncrement * i);
         }
         
     }

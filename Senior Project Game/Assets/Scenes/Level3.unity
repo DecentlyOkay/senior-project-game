@@ -5142,7 +5142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4171159575574141147, guid: 241fde74a947a62429bfdbd238e83c01, type: 3}
       propertyPath: message
-      value: Use Q and E to\nswap between weapons
+      value: Use Q|E or mouse\nwheel to swap\nbetween weapons
       objectReference: {fileID: 0}
     - target: {fileID: 4171159575574141148, guid: 241fde74a947a62429bfdbd238e83c01, type: 3}
       propertyPath: m_Size.x

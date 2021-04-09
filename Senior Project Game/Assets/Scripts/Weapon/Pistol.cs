@@ -35,7 +35,6 @@ public class Pistol : Weapon
         //{
         //    Physics.IgnoreCollision(collider, projectile.GetComponent<Collider>());
         //}
-        Vector3 spreadAngle = GetSpreadAngle();
-        projectile.FireProjectile(shootRay, spreadAngle);
+        projectile.FireProjectile(shootRay);
     }
 }
