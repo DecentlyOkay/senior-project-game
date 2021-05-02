@@ -1,3 +1,3 @@
 # senior-project-game
 Unity game for Senior Project.
-Yep, I finally started.
+Thanks to Dave Pottinger for his guidance and advice.
